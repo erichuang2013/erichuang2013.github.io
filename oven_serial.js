@@ -119,14 +119,16 @@
     var poller = null;
     var watchdog = null;
     function tryNextDevice() {
+        
         // If potentialDevices is empty, device will be undefined.
         // That will get us back here next time a device is connected.
         device = potentialDevices.shift();
+        console.log('tryNextDevice dev:' + device);
         if (!device) return;
 
         device.open({ stopBits: 0, bitRate: 38400, ctsFlowControl: 0 });
         device.set_receive_handler(function(data) {
-            //console.log('Received: ' + data.byteLength);
+            console.log('Received: ' + data.byteLength);
             if(!rawData || rawData.byteLength == 18) rawData = new Uint8Array(data);
             else rawData = appendBuffer(rawData, data);
 
@@ -144,6 +146,7 @@
             device.send(pingCmd.buffer);
         }, 50);
         watchdog = setTimeout(function() {
+            console.log('watchdog  setTimeout()');
             // This device didn't get good data in time, so give up on it. Clean up and then move on.
             // If we get good data then we'll terminate this watchdog.
             clearInterval(poller);
