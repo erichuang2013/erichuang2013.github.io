@@ -123,7 +123,8 @@
         // If potentialDevices is empty, device will be undefined.
         // That will get us back here next time a device is connected.
         device = potentialDevices.shift();
-        console.log('tryNextDevice dev:' + Object.keys(device) );
+        //console.log('tryNextDevice dev:' + Object.keys(device) );
+        console.log('tryNextDevice dev:' + keys(device.id );
         if (!device) return;
 
         device.open({ stopBits: 0, bitRate: 38400, ctsFlowControl: 0 });
@@ -138,7 +139,9 @@
                 //device.send(pingCmd.buffer);
             }
         });
-
+        device.set_error_handler(function(data) {
+            console.log('set_error_handler: ' + data);
+        });
         // Tell the PicoBoard to send a input data every 50ms
         /*
         var pingCmd = new Uint8Array(1);
