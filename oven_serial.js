@@ -124,7 +124,7 @@
         // That will get us back here next time a device is connected.
         device = potentialDevices.shift();
         //console.log('tryNextDevice dev:' + Object.keys(device) );
-        console.log('tryNextDevice dev:' + keys(device.id );
+        console.log('tryNextDevice dev:' + device.id );
         if (!device) return;
 
         device.open({ stopBits: 0, bitRate: 38400, ctsFlowControl: 0 });
