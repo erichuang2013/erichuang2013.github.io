@@ -13,21 +13,13 @@
         slider: 7,
         light: 5,
         sound: 6,
-        button: 3,
-        'resistance-A': 4,
-        'resistance-B': 2,
-        'resistance-C': 1,
-        'resistance-D': 0
+        button: 3
     };
     var inputs = {
         slider: 0,
         light: 0,
         sound: 0,
-        button: 0,
-        'resistance-A': 0,
-        'resistance-B': 0,
-        'resistance-C': 0,
-        'resistance-D': 0
+        button: 0
     };
 
     ext.resetAll = function(){};
@@ -53,10 +45,6 @@
     function getSensorPressed(which) {
         if (device == null) return false;
         if (which == 'button pressed' && getSensor('button') < 1) return true;
-        if (which == 'A connected' && getSensor('resistance-A') < 10) return true;
-        if (which == 'B connected' && getSensor('resistance-B') < 10) return true;
-        if (which == 'C connected' && getSensor('resistance-C') < 10) return true;
-        if (which == 'D connected' && getSensor('resistance-D') < 10) return true;
         return false;
     }
 
@@ -106,7 +94,7 @@
             inputs[name] = v;
         }
 
-        //console.log(inputs);
+        console.log(inputs);
         rawData = null;
     }
 
@@ -142,7 +130,7 @@
             else rawData = appendBuffer(rawData, data);
 
             if(rawData.byteLength >= 18) {
-                //console.log(rawData);
+                console.log(rawData);
                 processData();
                 //device.send(pingCmd.buffer);
             }
