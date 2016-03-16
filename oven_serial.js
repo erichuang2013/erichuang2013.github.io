@@ -123,7 +123,7 @@
         // If potentialDevices is empty, device will be undefined.
         // That will get us back here next time a device is connected.
         device = potentialDevices.shift();
-        console.log('tryNextDevice dev:' + device);
+        console.log('tryNextDevice dev:' + Object.keys(device) );
         if (!device) return;
 
         device.open({ stopBits: 0, bitRate: 38400, ctsFlowControl: 0 });
@@ -140,11 +140,14 @@
         });
 
         // Tell the PicoBoard to send a input data every 50ms
+        /*
         var pingCmd = new Uint8Array(1);
         pingCmd[0] = 1;
         poller = setInterval(function() {
             device.send(pingCmd.buffer);
         }, 50);
+        */
+        /*
         watchdog = setTimeout(function() {
             console.log('watchdog  setTimeout()');
             // This device didn't get good data in time, so give up on it. Clean up and then move on.
@@ -156,6 +159,7 @@
             device = null;
             tryNextDevice();
         }, 250);
+        */
     };
 
     ext._deviceRemoved = function(dev) {
