@@ -154,28 +154,10 @@
         if (motor.isOn) sendMotorState();
     };
 
-    function setMotorOn(type, motorID, flag) {
-        var motor = getMotor(type, motorID);
-        if (!motor) return; // motorID must be 0 or 1
-        var wasOn = motor.isOn && (motor.power > 0);
-        motor.isOn = (flag == true);
-        if (wasOn) checkForMotorsOff();
-        sendMotorState();
-    };
-
-    function setMotorPower(type, motorID, pwr) {
-        // Pwr: 0..100
-        var motor = getMotor(type, motorID);
-        if (!motor) return; // motorID must be 0 or 1
-        var wasOn = motor.isOn && (motor.power > 0);
-        motor.power = Math.max(0, Math.min(pwr, 100));
-        if (motor.power > 0) motor.isOn = true;
-        if (wasOn) checkForMotorsOff();
-        sendMotorState();
-    };
     
     var rgbCommand = new Uint8Array(9);
-    function sendRGBData() {
+    ext.sendRGBData = function() {
+    //function sendRGBData() {
         device.write(rgbCommand.buffer);
     };
     
@@ -192,51 +174,41 @@
 
 
 
-    function processData() {
-        var s = new Uint8Array(rawData);
-
-        if (okayToReadIDs()) {
-            id0 = s[3];
-            id1 = s[5];
-        }
-        weDoDistance = weDoTilt = 0; // zero if no sensor plugged in
-        updateSensor(id0, s[2]);
-        updateSensor(id1, s[4]);
-
-        rawData = null;
-    }
-
     var poller = null;
     ext._deviceConnected = function(dev) {
         if(device) return;
 
         device = dev;
         device.open();
+        /*
         poller = setInterval(function() {
             device.read(function(data) {
                 rawData = data;
             });
         }, 20);
+        */
     };
 
     ext._deviceRemoved = function(dev) {
         if(device != dev) return;
-        if(poller) poller = clearInterval(poller);
+        //if(poller) poller = clearInterval(poller);
         device = null;
     };
 
     ext._shutdown = function() {
+        /*
         setMotorOn('a', 0, false);
         setMotorOn('a', 1, false);
 
         if(poller) poller = clearInterval(poller);
         if(device) device.close();
+        */
         device = null;
     };
 
     ext._getStatus = function() {
-        if(!device) return {status: 1, msg: 'LEGO WeDo disconnected'};
-        return {status: 2, msg: ' LEGO WeDo connected'};
+        if(!device) return {status: 1, msg: ' Ring disconnected'};
+        return {status: 2, msg: ' Ring connected'};
     }
 
     var descriptor = {
