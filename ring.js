@@ -35,17 +35,17 @@
     };
     
     ext.rgbRaw = function(index, data) {
-        if(index>8||index<1) return;
-        index -= 1
-        console.log("rgbRGB()");
+        if(index>8 || index<1) return;
+        //index -= 1
+        //console.log("rgbRGB()");
         rgbData[index] = data;
         device.write(rgbData.buffer);
     }
     
     ext.rgbRGB = function(index, r, g, b) {
         if(index>8||index<1) return;
-        index -= 1
-        console.log("rgbRGB()");
+        //index -= 1
+        //console.log("rgbRGB()");
         data = Math.ceil(r*8*32/10) + Math.ceil(g*8*4/10) + Math.ceil(b*4/10);
         rgbData[index] = data;
         device.write(rgbData.buffer);
@@ -53,7 +53,7 @@
     
     var poller = null;
     ext._deviceConnected = function(dev) {
-        console.log("_deviceConnected()");
+        //console.log("_deviceConnected()");
         
         if(device) return;
         device = dev;
