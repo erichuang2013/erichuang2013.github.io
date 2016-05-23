@@ -1,8 +1,8 @@
-// wedoExtension.js
-// Shane M. Clements, January 2014
-// LEGO WEDO Scratch Extension
-//
+// Ring.js
+// Eric Huang 
 // This is an extension for development and testing of the Scratch Javascript Extension API.
+
+// http://scratchx.org/?url=http://erichuang2013.github.io/ring.js
 
 (function(ext) {
     var device = null;
@@ -24,114 +24,69 @@
     // Commands
  
     ext.resetAll = function() {
-	  ext.allMotorsOff('a');
+	  //ext.allMotorsOff('a');
     };
-    ext.startMotorPower = function(motor, power) {
-	switch(motor) {
-	    case "motor":
-		setMotorPower('m', 0, power);
-		setMotorPower('m', 1, power);
-		setMotorOn('m', 0, true);
-		setMotorOn('m', 1, true);
-		break;
-	    case "motor A":
-		setMotorPower('m', 0, power);
-		setMotorOn('m', 0, true);
-		break;
-	    case "motor B":
-		setMotorPower('m', 1, power);
-		setMotorOn('m', 1, true);
-		break;
-	    case "lights":
-		setMotorPower('l', 0, power);
-		setMotorPower('l', 1, power);
-		setMotorOn('l', 0, true);
-		setMotorOn('l', 1, true);
-		break;
-	    default:
-		setMotorPower('a', 0, power);
-		setMotorPower('a', 1, power);
-		setMotorOn('a', 0, true);
-		setMotorOn('a', 1, true);
-	}
-    };
-
-  
-    // Hat blocks
-    ext.whenDistance = function(s, dist) { return device!=null && ('<' == s ? (getDistance() < dist) : (getDistance() > dist)); };
-    ext.whenTilt = function(s, tilt) { return device!=null && ('=' == s ? (getTilt() == tilt) : (getTilt() != tilt)); };
-    //ext.whenDistanceLessThan = function(dist) { return device!=null && getDistance() < dist; };
-    //ext.whenTiltIs = function(tilt) { return device!=null && getTilt() == tilt; };
-
-    // Reporters
-    ext.getDistance = function() { return getDistance(); };
     ext.getTilt = function() { return getTilt(); };
 
     
-    var rgbCommand = new Uint8Array(9);
+    var rgbData = new Uint8Array(9);
     ext.sendRGBData = function() {
-    //function sendRGBData() {
-        rgbCommand[2] = 128;
-        device.write(rgbCommand.buffer);
+        //rgbData[2] = 128;
+        //rgbData[3] = 0xFF;
+        //rgbData[4] = 0x3;
+        device.write(rgbData.buffer);
     };
     
+    ext.rgbRaw = function(index, data) {
+        rgbData[index] = data;
+        device.write(rgbData.buffer);
+    
+    }
+    
+    ext.rgbRGB = function(index, r, g, b) {
+        data = Math.ceil(r*8*32/10) + Math.ceil(g*8*4/10) + Math.ceil(b*4/10);
+        rgbData[index] = data;
+        device.write(rgbData.buffer);
+    }
     
     var poller = null;
     ext._deviceConnected = function(dev) {
         if(device) return;
-
         device = dev;
         device.open();
-        /*
-        poller = setInterval(function() {
-            device.read(function(data) {
-                rawData = data;
-            });
-        }, 20);
-        */
     };
 
     ext._deviceRemoved = function(dev) {
         if(device != dev) return;
-        //if(poller) poller = clearInterval(poller);
+        if(poller) poller = clearInterval(poller);
         device = null;
     };
 
     ext._shutdown = function() {
         if(poller) poller = clearInterval(poller);
         if(device) device.close();
-        
         device = null;
     };
 
     ext._getStatus = function() {
-        //if(!device) return {status: 1, msg: ' Ring disconnected'};
+        if(!device) return {status: 1, msg: ' Ring disconnected'};
         return {status: 2, msg: ' Ring connected'};
     }
 
     var descriptor = {
         blocks: [
             [' ', 'test rgb',                           'sendRGBData'],
-            /*
-            ['w', 'turn %m.motor on for %n secs',               'motorOnFor',       'motor',1],
-            [' ', 'turn %m.motor on',                           'motorOn',          'motor'],
-            [' ', 'turn %m.motor off',                          'motorOff',         'motor'],
-            [' ', 'set %m.motor power to %n',                   'startMotorPower',  'motor',100],
-            [' ', 'set %m.motor2 direction to %m.motorDirection','setMotorDirection','motor','this way'],
-            ['h', 'when distance %m.lessMore %n',               'whenDistance',     '<',    20],
-            ['h', 'when tilt %m.eNe %n',                        'whenTilt',         '=',    1],
-            ['r', 'distance',                                   'getDistance'],
-            */
-            ['r', 'tilt',                                       'getTilt']
+            [' ', 'set %m.light raw:%n', 'rgbRaw', '0'],
+            [' ', 'set %m.light r %n g %n b %n', 'rgbRGB', '10', '10', '10'],
+            [' ', 'turn %m.light on', 'rgbOn', '1'],
+            ['r', 'tilt',                                   'getTilt']
         ],
         menus: {
-            motor: ['motor', 'motor A', 'motor B', 'lights', 'everything'],
-	    motor2: ['motor', 'motor A', 'motor B', 'all motors'],
-            motorDirection: ['this way', 'that way', 'reverse'],
-            lessMore: ['<', '>'],
+            light: ['1', '2', '3', '4', '5', '6', '7', '8'],
             eNe: ['=','not =']
         },
-	url: '/info/help/studio/tips/ext/LEGO WeDo/'
+        
+	url: 'https://github.com/erichuang2013/'
     };
     ScratchExtensions.register('Ring', descriptor, ext, {type: 'hid', vendor:1684, product:6});
 })({});
