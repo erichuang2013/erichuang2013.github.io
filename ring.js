@@ -40,7 +40,6 @@
     ext.rgbRaw = function(index, data) {
         rgbData[index] = data;
         device.write(rgbData.buffer);
-    
     }
     
     ext.rgbRGB = function(index, r, g, b) {
@@ -76,8 +75,8 @@
     var descriptor = {
         blocks: [
             [' ', 'test rgb',                           'sendRGBData'],
-            [' ', 'set %m.light raw:%n', 'rgbRaw', '0'],
-            [' ', 'set %m.light r %n g %n b %n', 'rgbRGB', '10', '10', '10'],
+            [' ', 'set %m.light raw:%n', 'rgbRaw', '1', '255'],
+            [' ', 'set %m.light r %n g %n b %n', 'rgbRGB', '1', '10', '10', '10'],
             [' ', 'turn %m.light on', 'rgbOn', '1'],
             ['r', 'tilt',                                   'getTilt']
         ],
