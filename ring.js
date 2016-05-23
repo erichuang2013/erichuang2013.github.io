@@ -41,7 +41,7 @@
     ext.rgbRGB = function(index, r, g, b) {
         if(index<1) return;
         index = --index % 8;
-        data = Math.ceil(r*256/10.0)&0xe0 | Math.ceil(g*256/10.0)&0xe0>>3 | Math.ceil(b*256/10.0)>>6;
+        data = (r<<6)&0x11000000 | (g<<3)&0b11000 | (b&0b11);
         console.log('data:'+data);
         rgbData[index+1] = data;
         device.write(rgbData.buffer);
@@ -77,7 +77,7 @@
     var descriptor = {
         blocks: [
             [' ', 'set light:%n data:%n', 'rgbRaw', '1', '255'],
-            [' ', 'set light:%n r %n g %n b %n', 'rgbRGB', '1', '10', '10', '10'],
+            [' ', 'set light:%n r %n g %n b %n', 'rgbRGB', '1', '3', '3', '3'],
             [' ', 'all lights off', 'allOff']
         ],
         menus: {
