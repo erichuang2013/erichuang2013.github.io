@@ -22,68 +22,10 @@
     var weDoTilt = 0;
 
     // Commands
-    ext.motorOnFor = function(motor, time, callback) {
-        //ext.allMotorsOn();
-	ext.motorOn(motor);
-
-        setTimeout(function() {
-	    ext.motorOff(motor);
-            //callback();
-	    if (typeof callback=="function") callback();
-        }, 1000 * time);
-    };
-    
-    ext.motorOn = function(motor) {
-	switch(motor) {
-	    case "motor":
-		ext.allMotorsOn('m');
-		break;
-	    case "motor A":
-		setMotorOn('m', 0, true);
-		break;
-	    case "motor B":
-		setMotorOn('m', 1, true);
-		break;
-	    case "lights":
-		ext.allMotorsOn('l');
-		break;
-	    default:
-		ext.allMotorsOn('a');
-	}
-    };
-
-    ext.allMotorsOn = function(type) {
-        setMotorOn(type, 0, true);
-        setMotorOn(type, 1, true);
-    };
-
-    ext.motorOff = function(motor) {
-	switch(motor) {
-	    case "motor":
-		ext.allMotorsOff('m');
-		break;
-	    case "motor A":
-		setMotorOn('m', 0, false);
-		break;
-	    case "motor B":
-		setMotorOn('m', 1, false);
-		break;
-	    case "lights":
-		ext.allMotorsOff('l');
-		break;
-	    default:
-		ext.allMotorsOff('a');
-	}
-    };
-
+ 
     ext.resetAll = function() {
-	ext.allMotorsOff('a');
+	  ext.allMotorsOff('a');
     };
-    ext.allMotorsOff = function(type) {
-        setMotorOn(type, 0, false);
-        setMotorOn(type, 1, false);
-    };
-
     ext.startMotorPower = function(motor, power) {
 	switch(motor) {
 	    case "motor":
@@ -144,36 +86,15 @@
     ext.getDistance = function() { return getDistance(); };
     ext.getTilt = function() { return getTilt(); };
 
-    // Internal logic
-    function setMotorDirection(motorID, dir) {
-        // Dir: -1 - counter-clockwise, 1 - clockwise, 0 - reverse
-        var motor = getMotor('m', motorID);
-        if (!motor) return; // motorID must be 0 or 1
-        if ((dir == -1) || (dir == 1)) motor.dir = dir;
-        if (dir == 0) motor.dir = -motor.dir; // reverse
-        if (motor.isOn) sendMotorState();
-    };
-
     
     var rgbCommand = new Uint8Array(9);
     ext.sendRGBData = function() {
     //function sendRGBData() {
+        rgbCommand[2] = 128;
         device.write(rgbCommand.buffer);
     };
     
-
-    var wedoCommand = new Uint8Array(9); wedoCommand[1] = 0x40;
-    function sendMotorState() {
-        if (device) {
-            // Each motor is controlled by a signed byte whose sign determines the direction and absolute value the power
-            wedoCommand[2] = motorValue(0);
-            wedoCommand[3] = motorValue(1);
-            device.write(wedoCommand.buffer);
-        }
-    }
-
-
-
+    
     var poller = null;
     ext._deviceConnected = function(dev) {
         if(device) return;
@@ -214,6 +135,7 @@
     var descriptor = {
         blocks: [
             [' ', 'test rgb',                           'sendRGBData'],
+            /*
             ['w', 'turn %m.motor on for %n secs',               'motorOnFor',       'motor',1],
             [' ', 'turn %m.motor on',                           'motorOn',          'motor'],
             [' ', 'turn %m.motor off',                          'motorOff',         'motor'],
@@ -222,6 +144,7 @@
             ['h', 'when distance %m.lessMore %n',               'whenDistance',     '<',    20],
             ['h', 'when tilt %m.eNe %n',                        'whenTilt',         '=',    1],
             ['r', 'distance',                                   'getDistance'],
+            */
             ['r', 'tilt',                                       'getTilt']
         ],
         menus: {
@@ -233,5 +156,5 @@
         },
 	url: '/info/help/studio/tips/ext/LEGO WeDo/'
     };
-    ScratchExtensions.register('LEGO WeDo', descriptor, ext, {type: 'hid', vendor:1684, product:6});
+    ScratchExtensions.register('Ring', descriptor, ext, {type: 'hid', vendor:1684, product:6});
 })({});
