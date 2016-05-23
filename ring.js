@@ -38,11 +38,13 @@
     };
     
     ext.rgbRaw = function(index, data) {
+        console.log("rgbRGB()");
         rgbData[index] = data;
         device.write(rgbData.buffer);
     }
     
     ext.rgbRGB = function(index, r, g, b) {
+        console.log("rgbRGB()");
         data = Math.ceil(r*8*32/10) + Math.ceil(g*8*4/10) + Math.ceil(b*4/10);
         rgbData[index] = data;
         device.write(rgbData.buffer);
@@ -50,18 +52,22 @@
     
     var poller = null;
     ext._deviceConnected = function(dev) {
+        console.log("_deviceConnected()");
+        
         if(device) return;
         device = dev;
         device.open();
     };
 
     ext._deviceRemoved = function(dev) {
+        console.log("_deviceRemoved()");
         if(device != dev) return;
         if(poller) poller = clearInterval(poller);
         device = null;
     };
 
     ext._shutdown = function() {
+        console.log("_shutdown()");
         if(poller) poller = clearInterval(poller);
         if(device) device.close();
         device = null;
