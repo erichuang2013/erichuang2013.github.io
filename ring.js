@@ -20,31 +20,35 @@
     var id1 = 0;
     var weDoDistance = 0;
     var weDoTilt = 0;
-
+    var rgbData = new Uint8Array(9);
     // Commands
  
     ext.resetAll = function() {
-	  //ext.allMotorsOff('a');
+	  ext.allOff();
+    };
+    ext.allOff = function() {
+        for(i=0; i<9; i++) rgbData[i] = 0;
+        device.write(rgbData.buffer);
     };
     ext.getTilt = function() { return getTilt(); };
 
     
-    var rgbData = new Uint8Array(9);
+    
     ext.sendRGBData = function() {
         device.write(rgbData.buffer);
     };
     
     ext.rgbRaw = function(index, data) {
-        if(index>8 || index<1) return;
-        index -= 2
+        //if(index>8 || index<1) return;
+        index -= 1
         //console.log("rgbRGB()");
         rgbData[index] = data;
         device.write(rgbData.buffer);
     }
     
     ext.rgbRGB = function(index, r, g, b) {
-        if(index>8||index<1) return;
-        index -= 2
+        //if(index>8||index<1) return;
+        index -= 1
         //console.log("rgbRGB()");
         data = Math.ceil(r*8*32/10) + Math.ceil(g*8*4/10) + Math.ceil(b*4/10);
         rgbData[index] = data;
@@ -84,6 +88,7 @@
             [' ', 'set light:%n raw:%n', 'rgbRaw', '1', '255'],
             [' ', 'set light:%n r %n g %n b %n', 'rgbRGB', '1', '10', '10', '10'],
             [' ', 'turn %m.light on', 'rgbOn', '1'],
+            [' ', 'all lights off', 'allOff'],
             ['r', 'tilt',                                   'getTilt']
         ],
         menus: {
