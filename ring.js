@@ -41,7 +41,7 @@
     ext.rgbRGB = function(index, r, g, b) {
         if(index<1) return;
         index = --index % 8;
-        data = Math.ceil(r*8*32/10.0) + Math.ceil(g*8*4/10.0) + Math.ceil(b*4/10.0);
+        data = Math.ceil(r*7/10.0)*32 + Math.ceil(g*7/10.0)*4 + Math.ceil(b*4/10.0);
         rgbData[index+1] = data;
         device.write(rgbData.buffer);
     }
