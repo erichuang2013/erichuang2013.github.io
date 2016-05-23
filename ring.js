@@ -30,13 +30,6 @@
         for(i=0; i<9; i++) rgbData[i] = 0;
         device.write(rgbData.buffer);
     };
-    ext.getTilt = function() { return getTilt(); };
-
-    
-    
-    ext.sendRGBData = function() {
-        device.write(rgbData.buffer);
-    };
     
     ext.rgbRaw = function(index, data) {
         if(index<1) return;
@@ -48,8 +41,8 @@
     ext.rgbRGB = function(index, r, g, b) {
         if(index<1) return;
         index = --index % 8;
-        data = Math.ceil(r*8*32/10) + Math.ceil(g*8*4/10) + Math.ceil(b*4/10);
-        rgbData[index] = data;
+        data = Math.ceil(r*8*32/10.0) + Math.ceil(g*8*4/10.0) + Math.ceil(b*4/10.0);
+        rgbData[index+1] = data;
         device.write(rgbData.buffer);
     }
     
@@ -82,11 +75,9 @@
 
     var descriptor = {
         blocks: [
-            [' ', 'set light:%n raw:%n', 'rgbRaw', '1', '255'],
+            [' ', 'set light:%n data:%n', 'rgbRaw', '1', '255'],
             [' ', 'set light:%n r %n g %n b %n', 'rgbRGB', '1', '10', '10', '10'],
-            [' ', 'turn %m.light on', 'rgbOn', '1'],
-            [' ', 'all lights off', 'allOff'],
-            ['r', 'tilt',                                   'getTilt']
+            [' ', 'all lights off', 'allOff']
         ],
         menus: {
             eNe: ['=','not =']
