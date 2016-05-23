@@ -41,7 +41,7 @@
     ext.rgbRGB = function(index, r, g, b) {
         if(index<1) return;
         index = --index % 8;
-        data = (r<<6)&0x11000000 | (g<<3)&0b11000 | (b&0b11);
+        data = (r<<6)&0b11000000 | (g<<3)&0b11000 | (b&0b11);
         console.log('data:'+data);
         rgbData[index+1] = data;
         device.write(rgbData.buffer);
