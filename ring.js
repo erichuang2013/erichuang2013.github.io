@@ -56,26 +56,7 @@
 	}
     };
 
-    ext.setMotorDirection = function(motor, s) {
-        var dir;
-        if('this way' == s) dir = 1;
-        else if('that way' == s) dir = -1;
-        else if('reverse' == s) dir = 0;
-        else return;
-
-	switch(motor) {
-	    case "motor A":
-		setMotorDirection(0, dir);
-		break;
-	    case "motor B":
-		setMotorDirection(1, dir);
-		break;
-	    default:
-		setMotorDirection(0, dir);
-		setMotorDirection(1, dir);
-	}
-    };
-
+  
     // Hat blocks
     ext.whenDistance = function(s, dist) { return device!=null && ('<' == s ? (getDistance() < dist) : (getDistance() > dist)); };
     ext.whenTilt = function(s, tilt) { return device!=null && ('=' == s ? (getTilt() == tilt) : (getTilt() != tilt)); };
@@ -117,18 +98,14 @@
     };
 
     ext._shutdown = function() {
-        /*
-        setMotorOn('a', 0, false);
-        setMotorOn('a', 1, false);
-
         if(poller) poller = clearInterval(poller);
         if(device) device.close();
-        */
+        
         device = null;
     };
 
     ext._getStatus = function() {
-        if(!device) return {status: 1, msg: ' Ring disconnected'};
+        //if(!device) return {status: 1, msg: ' Ring disconnected'};
         return {status: 2, msg: ' Ring connected'};
     }
 
