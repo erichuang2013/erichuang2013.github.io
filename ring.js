@@ -31,19 +31,20 @@
     
     var rgbData = new Uint8Array(9);
     ext.sendRGBData = function() {
-        //rgbData[2] = 128;
-        //rgbData[3] = 0xFF;
-        //rgbData[4] = 0x3;
         device.write(rgbData.buffer);
     };
     
     ext.rgbRaw = function(index, data) {
+        if(index>8||index<1) return;
+        index -= 1
         console.log("rgbRGB()");
         rgbData[index] = data;
         device.write(rgbData.buffer);
     }
     
     ext.rgbRGB = function(index, r, g, b) {
+        if(index>8||index<1) return;
+        index -= 1
         console.log("rgbRGB()");
         data = Math.ceil(r*8*32/10) + Math.ceil(g*8*4/10) + Math.ceil(b*4/10);
         rgbData[index] = data;
@@ -80,14 +81,12 @@
 
     var descriptor = {
         blocks: [
-            [' ', 'test rgb',                           'sendRGBData'],
-            [' ', 'set %m.light raw:%n', 'rgbRaw', '1', '255'],
-            [' ', 'set %m.light r %n g %n b %n', 'rgbRGB', '1', '10', '10', '10'],
+            [' ', 'set light:%n raw:%n', 'rgbRaw', '1', '255'],
+            [' ', 'set light:%n r %n g %n b %n', 'rgbRGB', '1', '10', '10', '10'],
             [' ', 'turn %m.light on', 'rgbOn', '1'],
             ['r', 'tilt',                                   'getTilt']
         ],
         menus: {
-            light: ['1', '2', '3', '4', '5', '6', '7', '8'],
             eNe: ['=','not =']
         },
         
