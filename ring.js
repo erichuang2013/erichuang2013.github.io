@@ -37,6 +37,7 @@
         index = --index % 8;
         rgbData[index+1] = data;
         device.write(rgbData.buffer);
+        device.write(rgbData.buffer);
         console.log("rgbRaw()");
     }
     
@@ -46,6 +47,8 @@
         data = (r<<6)&0b11000000 | (g<<3)&0b11000 | (b&0b11);
         console.log('data:'+data);
         rgbData[index+1] = data;
+        device.write(rgbData.buffer);
+        console.log("rgbRGB()");
         device.write(rgbData.buffer);
         console.log("rgbRGB()");
     }
