@@ -29,6 +29,7 @@
     ext.allOff = function() {
         for(i=0; i<9; i++) rgbData[i] = 0;
         device.write(rgbData.buffer);
+        console.log("allOff()");
     };
     
     ext.rgbRaw = function(index, data) {
@@ -36,6 +37,7 @@
         index = --index % 8;
         rgbData[index+1] = data;
         device.write(rgbData.buffer);
+        console.log("rgbRaw()");
     }
     
     ext.rgbRGB = function(index, r, g, b) {
@@ -45,6 +47,7 @@
         console.log('data:'+data);
         rgbData[index+1] = data;
         device.write(rgbData.buffer);
+        console.log("rgbRGB()");
     }
     
     var poller = null;
@@ -76,8 +79,8 @@
 
     var descriptor = {
         blocks: [
-            [' ', '開燈 位置 %n 資料:%n', 'rgbRaw', '1', '100'],
-            [' ', '開燈 位置 %n 紅 %n 綠 %n 藍 %n', 'rgbRGB', '1', '3', '3', '3'],
+            [' ', '開燈 位置%n 資料%n', 'rgbRaw', '1', '100'],
+            [' ', '開燈 位置%n 紅%n 綠%n 藍%n', 'rgbRGB', '1', '3', '3', '3'],
             [' ', '關燈', 'allOff']
         ],
         menus: {
