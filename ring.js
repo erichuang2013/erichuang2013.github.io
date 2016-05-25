@@ -1,4 +1,4 @@
-// Ring.js
+﻿// Ring.js
 // Eric Huang 
 // This is an extension for development and testing of the Scratch Javascript Extension API.
 
@@ -76,12 +76,11 @@
 
     var descriptor = {
         blocks: [
-            [' ', 'set light:%n data:%n', 'rgbRaw', '1', '255'],
-            [' ', 'set light:%n r %n g %n b %n', 'rgbRGB', '1', '3', '3', '3'],
-            [' ', 'all lights off', 'allOff']
+            [' ', '開燈 位置 %n 資料:%n', 'rgbRaw', '1', '100'],
+            [' ', '開燈 位置 %n 紅 %n 綠 %n 藍 %n', 'rgbRGB', '1', '3', '3', '3'],
+            [' ', '關燈', 'allOff']
         ],
         menus: {
-            eNe: ['=','not =']
         },
         
 	url: 'https://github.com/erichuang2013/'
