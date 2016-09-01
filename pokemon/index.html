@@ -190,31 +190,48 @@ names = {
 151: "夢幻 Mew",
 }
 var infowindow;
+var markerClicked;
+function getInfoWindowContent(maker) {
+    var d = new Date();
+    var n = d.getTime()/1000;
+    diff = maker.created+60*15-n;
+    title = names[maker.pokemonId] + '<br/>time: ' + Math.floor(diff/60) + 'm' + Math.floor(diff%60) + 's' + '<br/>by:' + maker.trainerName + '<br/>up:' + maker. upvotes + ' down:' + maker.downvotes;
+    return title;
+}
+function updateInfoWindow() {
+    if(markerClicked!=undefined&&infowindow!=undefined) {
+      infowindow.setContent(getInfoWindowContent(markerClicked));
+    }
+}
 function getPokemon(ne,sw) {
   monsters = [3, 5, 6, 9, 15, 22, 24, 26, 28, 31, 34, 36, 38, 40, 42, 45, 51, 52, 53, 56, 57, 58, 59, 62, 64, 65, 66, 67, 68, 71, 73, 74, 75, 78, 80, 81, 82, 83, 86, 87, 88, 89, 91, 92, 93, 94, 95, 96, 97, 100, 101, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 115, 117, 119, 112, 125, 128, 130, 131, 132, 134, 135, 136, 137, 139, 141, , 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154];
   //$.each(monsters, function( mid, obj ){
     link = 'http://www.pokeradar.io/api/v1/submissions?deviceId=f4341920706d11e69e747353cbf0865f&minLatitude=' + sw.lat() + '&maxLatitude='+ ne.lat() +'&minLongitude=' +ne.lng() + '&maxLongitude=' +sw.lng() + '&pokemonId=0';
     //console.log(link);
     
-    var d = new Date();
-    var n = d.getTime()/1000;
+    
     $.get( link, function( data ) {
       //console.log(data);
       $.each(data.data, function( index, obj ) {
         if(obj.userId==13661365 || obj.upvotes>1) {
         if(monsters.indexOf(obj.pokemonId) != -1) {
         //console.log( index + ": " + obj.trainerName + '/c:'+ obj.created + '/t:' + (n-obj.created )); //created, downvotes, upvotes, "13661365"
-        diff = obj.created+60*15-n;
+        
         var marker = new google.maps.Marker({
           position: {lat: obj.latitude, lng: obj.longitude},
           map: map,
+          created: obj.created,
+          pokemonId: obj.pokemonId,
+          trainerName: obj.trainerName,
+          upvotes: obj.upvotes,
+          downvotes: obj.downvotes,
           icon: 'http://df48mbt4ll5mz.cloudfront.net/images/pokemon/'+obj.pokemonId+'.png',
-          title: names[obj.pokemonId] + '<br/>time: ' + Math.floor(diff/60) + 'm' + Math.floor(diff%60) + 's' + '<br/>by:' + obj.trainerName + '<br/>up:' + obj. upvotes + ' down:' + obj.downvotes
         });
         marker.addListener('click', function() {
           if(infowindow==undefined) infowindow = new google.maps.InfoWindow();
-          infowindow.setContent(marker.title);
+          infowindow.setContent(getInfoWindowContent(this));
           infowindow.open(map, this);
+          markerClicked = this;
         });
         }
         }
@@ -237,6 +254,8 @@ function initMap() {
     bounds = map.getBounds(); 
     getPokemon(bounds.getNorthEast(),bounds.getSouthWest());
   });
+  
+  setInterval(updateInfoWindow, 1000);
   
  
 }
