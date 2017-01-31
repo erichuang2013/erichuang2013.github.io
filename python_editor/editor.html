@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Split.js</title>
+  <title>Full Screen Python Online Editor</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css">
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css"> -->
+  <link rel="stylesheet" href="./css/glyphicons/glyphicons.css" type="text/css" />
+  <link rel="stylesheet" href="./css/font-awesome/css/font-awesome.min.css" type="text/css" />
+  <link rel="stylesheet" href="./css/material-design-icons/material-design-icons.css" type="text/css" />
+  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.8.0/styles/github.min.css">
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js" type="text/javascript"></script> 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.8.0/highlight.min.js"></script>
@@ -14,17 +18,37 @@
   <script src="http://www.skulpt.org/static/skulpt-stdlib.js" type="text/javascript"></script>
   <script src="http://www.skulpt.org/static/processing-1.4.1.min.js" type="text/javascript"></script>
   <style>
-  <!-- http://erichuang2013.github.io/python_editor/editor.html -->
   
-  hr {
-    margin-top: 2px;
+  <!-- url: http://erichuang2013.github.io/python_editor/editor.html -->
+  
+  .container {
+    width: 100%;
   }
-
+  
+  #thiseditor:-webkit-full-screen {
+  width: 100%;
+  height: 100%;
+  }
+  
+  .controls {
+    margin-top:5px;
+	margin-bottom:5px;
+  }
+  
+  .icon {
+    margin: 5px;
+	color: green;
+  }
+  .icon:hover {
+    color: blue;
+  }
+  
+  
   .api {
     height: 500px;
 	width: 100%;
     border: 1px solid #ddd;
-    border-radius: 4px;
+    border-radius: 0px;
   }
 
   .example-4, .example-5 {
@@ -34,7 +58,7 @@
   .split p {
     padding: 20px;
   }
-
+  
   .split {
     -webkit-box-sizing: border-box;
        -moz-box-sizing: border-box;
@@ -46,7 +70,6 @@
 
   .gutter {
     background-color: #eee;
-
     background-repeat: no-repeat;
     background-position: 50%;
   }
@@ -57,7 +80,7 @@
   }
 
   .gutter.gutter-vertical {
-    background-image: url('./image/grips/horizontal.png');
+    background-image: url('./image/grips/horizontal.png');	
     cursor: ns-resize;
   }
 
@@ -68,8 +91,20 @@
   </style>
 </head>
 <body>
-    <div class="container">
-        <div class="api">
+    <div  class="container">
+	    <div class="controls">
+			<i class="icon fa fa-lg fa-play" id="run"></i>
+			<i class="icon fa fa-lg fa-save" id="save"></i>
+			<i class="icon fa fa-lg fa-arrows-alt" id="fullscreen"></i>
+			<i class="icon fa fa-lg fa-terminal" id="terminal"></i>
+			<i class="icon fa fa-lg fa-undo" id="revert"></i>
+			<i class="icon fa fa-lg fa-font" id="font"></i>
+			<i class="icon fa fa-lg fa-plus" id="plus"></i>
+			<i class="icon fa fa-lg fa-minus" id="minus"></i>
+			<i class="icon fa fa-lg fa-question" id="help"></i>
+		</div>
+		
+        <div id="thiseditor" class="api">
           <div id="editor" class="split split-horizontal"><pre id="editor_ace">
 from processing import *
 
@@ -107,10 +142,11 @@ run()
           <button onclick="split.setSizes([25, 75])">Set Sizes 25/50/25%</button>
           <button onclick="split.setSizes([0, 100])">Collapse First</button>
         </div>
-		-->
+		
 		<form> 
 		<button type="button" onclick="runit()">Run</button> 
 		</form> 
+		-->
     </div>
 </body>
 <script src="./js/split.js"></script>
@@ -125,15 +161,15 @@ run()
       gutterSize: 8,
       cursor: 'row-resize'
     })
-</script>
-<script>
-var editor1;
-
-editor1 = ace.edit("editor_ace");
-editor1.setTheme("ace/theme/tomorrow");
-editor1.session.setMode("ace/mode/python");
-editor1.setAutoScrollEditorIntoView(true);
-editor1.setOption("maxLines", 30);
+	
+var editor;
+var fontSize = 14;
+editor = ace.edit("editor_ace");
+editor.setTheme("ace/theme/tomorrow");
+editor.session.setMode("ace/mode/python");
+editor.setAutoScrollEditorIntoView(true);
+editor.setOption("maxLines", 30);
+editor.setFontSize(fontSize);
 
 // output functions are configurable.  This one just appends some text
 // to a pre element.
@@ -152,9 +188,7 @@ function builtinRead(x) {
 // configure the output function
 // call Sk.importMainWithBody()
 function runit() { 
-   //var prog = document.getElementById("editor1").value; 
-   var prog = editor1.getValue();
-   console.log(prog);
+   var prog = editor.getValue();
    var mypre = document.getElementById("output"); 
    mypre.innerHTML = ''; 
    Sk.pre = "output";
@@ -188,7 +222,129 @@ function runit() {
        console.log(err.toString());
 	   mypre.innerHTML = mypre.innerHTML + '<br/>' + err.toString(); 
    });
-} 
+}
+
+function enterFullscreen() {
+	i = document.getElementById("thiseditor");
+	// go full-screen
+	if (i.requestFullscreen) {
+		i.requestFullscreen();
+	} else if (i.webkitRequestFullscreen) {
+		i.webkitRequestFullscreen();
+	} else if (i.mozRequestFullScreen) {
+		i.mozRequestFullScreen();
+	} else if (i.msRequestFullscreen) {
+		i.msRequestFullscreen();
+	}
+}
+
+/*
+function do_keyUp(e) {
+    if (e.ctrlKey && e.keyCode == 82) { //R
+        runit();
+    }
+	if (e.ctrlKey && e.keyCode == 70) { //F
+        enterFullscreen();
+    }
+	
+}
+*/
+// register the handler 
+//document.addEventListener('keyup', do_keyUp, false);
+$(document).keydown(function(e) {
+    if ((e.which == '115' || e.which == '83' ) && (e.ctrlKey || e.metaKey))
+    {
+		save();
+        e.preventDefault();
+        //alert("Ctrl-s pressed");
+        return false;
+    }
+	if ((e.which == '115' || e.which == '82' ) && (e.ctrlKey || e.metaKey))
+    {
+		runit();
+        e.preventDefault();
+        //alert("Ctrl-r pressed");
+        return false;
+    }
+	/*
+	if ((e.which == '115' || e.which == '221' ) && (e.ctrlKey || e.metaKey))
+    {
+		increaseFontSize();
+        e.preventDefault();
+        //alert("Ctrl-] pressed");
+        return false;
+    }
+	if ((e.which == '115' || e.which == '219' ) && (e.ctrlKey || e.metaKey))
+    {
+		decreaseFontSize();
+        e.preventDefault();
+        //alert("Ctrl-[ pressed");
+        return false;
+    }
+	if ((e.which == '115' || e.which == '220' ) && (e.ctrlKey || e.metaKey))
+    {
+		normalizeFontSize();
+        e.preventDefault();
+        //alert("Ctrl-\ pressed");
+        return false;
+    }
+	*/
+    return true;
+});
+
+
+function normalizeFontSize() {
+	fontSize = 14;
+	editor.setFontSize(fontSize);
+}
+function increaseFontSize() {
+	fontSize += 2;
+	if(fontSize>22) fontSize = 22;
+	editor.setFontSize(fontSize);
+}
+function decreaseFontSize() {
+	fontSize -= 2;
+	if(fontSize<8) fontSize = 8;
+	editor.setFontSize(fontSize);
+}
+function showHelp() {
+	 window.open('https://www.python.org','python');
+}
+function save() {
+	localStorage.setItem('editor', JSON.stringify( editor.getValue()));
+}
+function revert() {
+	var retrievedObject = localStorage.getItem('editor');
+	editor.setValue(JSON.parse(retrievedObject), 1);
+}
+
+$('document').ready(function(){
+	$('#run').click(function(){
+	  runit();
+	});
+	$('#fullscreen').click(function(){
+		enterFullscreen();
+	});
+	$('#font').click(function(){
+		normalizeFontSize();
+	});
+	$('#plus').click(function(){
+		increaseFontSize();
+	});
+	$('#minus').click(function(){
+		decreaseFontSize();
+	});
+	$('#save').click(function(){
+		save();
+	});
+	$('#revert').click(function(){
+		revert();
+	});
+	$('#help').click(function(){
+		showHelp();
+	});
+});
+
 </script>
   
 </html>
