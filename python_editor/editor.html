@@ -157,6 +157,7 @@ run()
   
   function play(url) {
       audio = audios[url];
+	  console.log(audio);
 	  if(audio == undefined) {
          var audio = new Audio(url);
 		 audios[url] = audio;
