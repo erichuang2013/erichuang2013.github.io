@@ -155,6 +155,17 @@ run()
 <script>
   audios = {};
   
+  function play(url) {
+      audio = audios[url];
+	  if(audio == undefined) {}
+         var audio = new Audio('http://static.thumb.com.tw/paste/IDBF9BE.wav');
+		 audios[url] = audio;
+         audio.play();
+	  } else
+	     audio.play();
+    }  	
+  }
+  
   function playSound (snum) {
     if (snum == 1){
       document.getElementById('a1').play();
