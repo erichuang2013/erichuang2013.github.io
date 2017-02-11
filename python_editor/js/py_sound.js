@@ -2,7 +2,7 @@ var $builtinmodule = function(name)
 {
     var mod = {};
 	mod.play = new Sk.builtin.func(function(url){
-        play(Sk.builtin.asnum$(url));
+        play(Sk.builtin.str$(url));
 
         return new Sk.builtin.none;
     })

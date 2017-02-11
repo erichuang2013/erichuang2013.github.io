@@ -158,7 +158,7 @@ run()
   function play(url) {
       audio = audios[url];
 	  if(audio == undefined) {
-         var audio = new Audio('http://static.thumb.com.tw/paste/IDBF9BE.wav');
+         var audio = new Audio(url);
 		 audios[url] = audio;
          audio.play();
 	  } else {
