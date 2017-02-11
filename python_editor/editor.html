@@ -161,6 +161,10 @@ run()
       document.getElementById('a2').play();
     }  
   }
+  function playSoundFromURL (url) {
+    document.getElementById('a1').src = url;
+    document.getElementById('a1').play();  
+  }
 
     var split = Split(['#editor', '#display'], {
         sizes: [50, 50],
