@@ -6,7 +6,7 @@ var $builtinmodule = function(name)
 
         return new Sk.builtin.none;
     })
-	mod.playSoundFromURL = new Sk.builtin.func(function(num, url){
+	mod.setSoundSrc = new Sk.builtin.func(function(num, url){
         setSoundSrc(Sk.builtin.asnum$(num, url));
 
         return new Sk.builtin.none;
