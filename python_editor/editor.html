@@ -161,9 +161,13 @@ run()
       document.getElementById('a2').play();
     }  
   }
-  function playSoundFromURL (url) {
-    document.getElementById('a1').src = url;
-    document.getElementById('a1').play();  
+  function setSoundSrc (num, url) {
+    if (snum == 1){
+      document.getElementById('a1').src = url;
+    }
+    if (snum == 2){
+      document.getElementById('a2').src = url;
+    }
   }
 
     var split = Split(['#editor', '#display'], {
