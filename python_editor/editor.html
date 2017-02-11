@@ -153,14 +153,21 @@ run()
 </body>
 <script src="./js/split.js"></script>
 <script>
+  audios = {};
+  
   function playSound (snum) {
     if (snum == 1){
       document.getElementById('a1').play();
     }
     if (snum == 2){
       document.getElementById('a2').play();
-    }  
+    }
+    if (snum == 3){
+      var audio = new Audio('http://static.thumb.com.tw/paste/IDBF9BE.wav');
+      audio.play();
+    }  	
   }
+  
   function setSoundSrc (num, url) {
     if (num == 1){
       document.getElementById('a1').src = url;
