@@ -148,9 +148,20 @@ run()
 		</form> 
 		-->
     </div>
+	<audio id="a1" src="http://static.thumb.com.tw/paste/IF07DA1.wav"></audio>
+    <audio id="a2" src="http://static.thumb.com.tw/paste/IDBF9BE.wav"></audio>
 </body>
 <script src="./js/split.js"></script>
 <script>
+  function playSound (snum) {
+    if (snum == 1){
+      document.getElementById('a1').play();
+    }
+    if (snum == 2){
+      document.getElementById('a2').play();
+    }  
+  }
+
     var split = Split(['#editor', '#display'], {
         sizes: [50, 50],
         minSize: 0,
@@ -203,6 +214,9 @@ function runit() {
             "matplotlib.pyplot" : {
                 path: '/static/primeronoo/skulpt/external/matplotlib/pyplot/__init__.js',
                 dependencies: ['/static/primeronoo/skulpt/external/deps/d3.min.js'],
+            },
+			"playsound": {
+                path: 'http://erichuang2013.github.io/python_editor/js/learnpython/__init__.js'
             },
             "arduino": {
                 path: '/static/primeronoo/skulpt/external/arduino/__init__.js'
@@ -262,6 +276,7 @@ $(document).keydown(function(e) {
 	if ((e.which == '115' || e.which == '82' ) && (e.ctrlKey || e.metaKey))
     {
 		runit();
+		
         e.preventDefault();
         //alert("Ctrl-r pressed");
         return false;
