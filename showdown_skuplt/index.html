@@ -13,12 +13,15 @@
 <div id="output2">output2</div>
 
 <script>
-makrkdown = $.get("test.md");
-var converter = new showdown.Converter(),
-    text      = markdown,
+$.get( "test.md", function( data ) {
+  var converter = new showdown.Converter(),
+    text      = data,
     html      = converter.makeHtml(text);
-console.log(html);
-document.getElementById("output").innerHTML = html;
+  console.log(html);
+  document.getElementById("output").innerHTML = html;
+
+});
+
 </script>
 
 </html>
