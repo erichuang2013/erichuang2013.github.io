@@ -3,6 +3,11 @@
 <head>
 <title>Showdown Live Editor</title>
 <script src="showdown.js" </script>
+</head>
+
+<div id="output">output</div>
+<div id="output2">output2</div>
+
 <script>
 var converter = new showdown.Converter(),
     text      = '#hello, markdown!',
@@ -10,7 +15,5 @@ var converter = new showdown.Converter(),
 console.log(html);
 document.getElementById("output").innerHTML = html;
 </script>
-<div id="output">output</div>
-<div id="output2">output2</div>
-</head>
+
 </html>
