@@ -7,9 +7,10 @@
 var converter = new showdown.Converter(),
     text      = '#hello, markdown!',
     html      = converter.makeHtml(text);
-	console.log(html);
-	document.getElementById("output").innerHTML = "html";
+console.log(html);
+document.getElementById("output").innerHTML = html;
 </script>
-<div id="output"></div>
+<div id="output">output</div>
+<div id="output2">output2</div>
 </head>
 </html>
