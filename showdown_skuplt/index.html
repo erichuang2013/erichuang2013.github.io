@@ -2,15 +2,20 @@
 <html lang="en">
 <head>
 <title>Showdown Live Editor</title>
-<script src="showdown.js" </script>
+<script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+<script src="showdown.js"></script>
 </head>
 
 <div id="output">output</div>
 <div id="output2">output2</div>
 
 <script>
+makrkdown = $.get("test.md");
 var converter = new showdown.Converter(),
-    text      = '#hello, markdown!',
+    text      = markdown,
     html      = converter.makeHtml(text);
 console.log(html);
 document.getElementById("output").innerHTML = html;
