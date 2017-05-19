@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Showdown Live Editor</title>
+<script>
+var converter = new showdown.Converter(),
+    text      = '#hello, markdown!',
+    html      = converter.makeHtml(text);
+	console.log(html);
+	document.getElementById("output").innerHTML = "html";
+</script>
+<div id="output"></div>
+</head>
+</html>
