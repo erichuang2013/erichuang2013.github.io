@@ -13,13 +13,19 @@
 <div id="output2">output2</div>
 
 <script>
-$.get( "test2.md", function( data ) {
+var md = '#hello2, markdown!\n' 
+	+ '###hello, markdown!\n' 
+	+ '<h1 id="myid">My cool header with ID</h1>' 
+	+ '<h1 class="block" id="code">My cool header with ID</h1>\n\n'
+	+ '    x = 0\n'
+    + '    x = 2 + 2\n'
+    + '    what is x\n';
+    
   var converter = new showdown.Converter(),
-    text      = data,
+    text      = md,
     html      = converter.makeHtml(text);
   console.log(html);
   document.getElementById("output").innerHTML = html;
-});
 </script>
 
 </html>
