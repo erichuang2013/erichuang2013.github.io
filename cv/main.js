@@ -12,7 +12,7 @@ var links = ["https://www.rcplanet.com/68019/Traxxas_Slash_1_10_2WD_Short_Course
 
 var titles = ["Traxxas Slash 4X4 遙控車", "Traxxas Bandit 2wd 遙控車", "四軸直昇機", "3D設計及列印", "Python程式設計", "Scratch兒童程式教學", "AI人工智慧"];
 var index = 0;
-var autoplay = false;
+var autoplay = true;
 
 function prevPic() {
   
