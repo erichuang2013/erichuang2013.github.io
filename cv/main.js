@@ -1,4 +1,4 @@
-let links = ["https://www.rcplanet.com/68019/Traxxas_Slash_1_10_2WD_Short_Course_Truck_RTR_iD_T.jpg",
+var links = ["https://www.rcplanet.com/68019/Traxxas_Slash_1_10_2WD_Short_Course_Truck_RTR_iD_T.jpg",
 
 "http://www.towerhobbies.com/products/traxxas/trad27/trad27br_550.jpg",
 
@@ -10,20 +10,20 @@ let links = ["https://www.rcplanet.com/68019/Traxxas_Slash_1_10_2WD_Short_Course
              "http://d1s8mqgwixvb29.cloudfront.net/article/article_extra_large_image/1468824468_Wf8CWa_AI.jpg"
 ];
 
-let titles = ["Traxxas Slash 4X4 遙控車", "Traxxas Bandit 2wd 遙控車", "四軸直昇機", "3D設計及列印", "Python程式設計", "Scratch兒童程式教學", "AI人工智慧"];
-let index = 0;
-let autoplay = false;
+var titles = ["Traxxas Slash 4X4 遙控車", "Traxxas Bandit 2wd 遙控車", "四軸直昇機", "3D設計及列印", "Python程式設計", "Scratch兒童程式教學", "AI人工智慧"];
+var index = 0;
+var autoplay = false;
 
 function prevPic() {
   
 }
 function nextPic() {
   console.log("nextPic: " + index);
-  let img = document.getElementById("pic");
+  var img = document.getElementById("pic");
   index++;
   img.src = links[index % links.length];
   
-  let title = document.getElementById("title");
+  var title = document.getElementById("title");
   title.innerHTML = titles[index % links.length];
   console.log(title);
   
