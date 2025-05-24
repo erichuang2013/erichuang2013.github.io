@@ -1,0 +1,70 @@
+body {
+    margin: 0;
+    overflow: hidden; /* Hide scrollbars */
+    font-family: Arial, sans-serif;
+    background-color: #111;
+    color: #fff;
+}
+
+#scene-canvas {
+    display: block; /* Remove default inline spacing */
+    width: 100vw;
+    height: 100vh;
+}
+
+#controls-panel {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    padding: 15px;
+    background-color: rgba(40, 40, 40, 0.8);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    width: 250px;
+}
+
+#controls-panel h2 {
+    margin-top: 0;
+    font-size: 1.2em;
+    border-bottom: 1px solid #555;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+#controls-panel div {
+    margin-bottom: 10px;
+}
+
+#controls-panel label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 0.9em;
+}
+
+#controls-panel input[type="range"] {
+    width: 100%;
+}
+
+#controls-panel button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 5px;
+    width: 100%;
+    box-sizing: border-box; /* Ensure padding doesn't increase width */
+}
+
+#controls-panel button:hover {
+    background-color: #0056b3;
+}
+
+#status-display {
+    margin-top: 15px;
+    padding: 8px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    font-size: 0.9em;
+}
