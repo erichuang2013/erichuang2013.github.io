@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magnect - 磁场探索</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <script src="sketch.js"></script>
+    <style>
+        body { font-family: sans-serif; margin: 20px; background-color: #f4f4f4; color: #333; }
+        main { display: flex; flex-wrap: wrap; justify-content: center; }
+        #canvas-container { margin-right: 20px; margin-bottom: 20px; border: 1px solid black; line-height: 0; /* Prevents gap under canvas */ }
+        .text-section { 
+            margin-bottom: 15px; 
+            padding: 15px; 
+            border: 1px solid #ddd; 
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            max-width: 600px; /* Increased max-width */
+        }
+        .text-section h3 { 
+            margin-top: 0; 
+            color: #0056b3; /* A slightly darker blue for headings */
+        }
+        .text-section ul, .text-section ol {
+            padding-left: 20px;
+        }
+        .text-section li {
+            margin-bottom: 8px; /* Spacing between list items */
+        }
+    </style>
+</head>
+<body>
+    <header style="text-align: center; margin-bottom: 20px;">
+        <h1>探索磁铁的奥秘：磁力线可视化</h1>
+    </header>
+    <main>
+        <div id="canvas-container"></div>
+        <div>
+            <div class="controls text-section">
+                <h4>Simulation Controls:</h4>
+                <label for="particleSlider">Number of Field Lines: <span id="particleCountDisplay">400</span></label>
+                <input type="range" id="particleSlider" name="particleSlider" min="50" max="1500" value="400" step="10" style="width: 100%;">
+            </div>
+            <div id="intro-text" class="text-section">磁力线是看不见的，但我们可以让它‘显形’！准备好你的魔法画笔了吗？</div>
+            <div id="preparation-text" class="text-section"><h3>准备：</h3>
+    <ul>
+        <li>一块棒状磁铁或U形磁铁。（本模拟使用棒状磁铁）</li>
+        <li>一小袋铁屑（或细铁粉）。（本模拟使用虚拟铁屑）</li>
+        <li>一张白纸。</li>
+        <li>一张硬纸板。</li>
+    </ul></div>
+            <div id="action-text" class="text-section"><h3>行动：</h3>
+    <ol>
+        <li>将白纸平铺在桌面上。（画布代表白纸）</li>
+        <li>将磁铁放在白纸下方（或上方）。（拖动画布中的磁铁）</li>
+        <li>小心翼翼地、均匀地将少量铁屑撒在白纸上。（铁屑已在画布中模拟）</li>
+        <li>用手指轻轻敲击纸张，观察铁屑的变化。（观察虚拟铁屑如何排列）</li>
+        <li>尝试移动磁铁，或者换一个方向放置磁铁（使用方向键旋转），看看铁屑图案有什么不同。</li>
+        <li>按 TAB 键切换活动磁铁，按 F 键翻转活动磁铁的磁极。</li>
+        <li>尝试用两块磁铁靠近（先异极相吸，再同极相斥），看看铁屑的图案会发生什么有趣的变化。</li>
+    </ol></div>
+            <div id="思考与分享-text" class="text-section"><h3>思考与分享：</h3>
+    <ul>
+        <li>你看到了什么奇妙的图案？它们围绕着磁铁的哪里？</li>
+        <li>在磁铁的哪些地方，铁屑最密集？这说明了什么？</li>
+        <li>如果你用两块磁铁靠近（先异极相吸，再同极相斥），铁屑的图案会发生什么有趣的变化？用你的观察来描述磁力线的特点吧！</li>
+    </ul></div>
+        </div>
+    </main>
+</body>
+</html>
