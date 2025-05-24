@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrickVerse Lego & Robotics</title>
+    
+    <!-- No AOS CSS needed -->
+    
+    <style>
+        /* Basic Reset/Defaults */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: sans-serif;
+            line-height: 1.6;
+            padding: 20px; /* Added body padding */
+            /* Added for native smooth scroll, similar to what Locomotive Scroll provided */
+            scroll-behavior: smooth; 
+        }
+
+        h1, h2, h3, p {
+            margin: 0; /* Default margins removed, will be set specifically */
+        }
+
+        /* Layout and Spacing */
+        header {
+            background-color: #333;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        section {
+            margin-bottom: 100vh; /* Significant bottom margin for scroll effects */
+            padding: 40px;
+            border: 1px solid #eee; /* Added a light border to see section bounds */
+            background-color: #f9f9f9; /* Light background for sections */
+        }
+        
+        /* Typography */
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-align: center; /* Center header H1 */
+        }
+
+        h2 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #333;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        p {
+            margin-bottom: 15px;
+            color: #666;
+        }
+
+        /* Product Gallery */
+        .product-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .product-gallery > div {
+            border: 1px solid #ddd;
+            padding: 15px;
+            width: 300px;
+            text-align: center;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+            background-color: white; /* White background for product cards */
+        }
+
+        .product-gallery img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        /* Images */
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 5px; /* Slightly rounded corners for images */
+        }
+
+        /* Specific styling for robotics lesson image to ensure clarity */
+        #robotics-lessons img {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15); /* Add a subtle shadow */
+        }
+
+        /*
+        To ensure elements animate in from invisible state,
+        you might add initial hidden styles IF not using GSAP.from() directly,
+        or if you want them invisible *before* ScrollTrigger initializes.
+        However, gsap.from() implicitly handles the initial state.
+        */
+        .hidden-initially {
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>BrickVerse Lego & Robotics</h1>
+    </header>
+    <main>
+        <section id="about-us">
+            <!-- No data-aos attributes needed, handled by GSAP JS -->
+            <h2>About Our Lego Store</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. We are passionate about Lego and fostering learning through play.</p>
+        </section>
+        <section id="products">
+            <h2>Our Lego Products</h2>
+            <p>Explore our wide range of Lego sets, from classic themes to the latest releases. We have something for every builder!</p>
+            <div class="product-gallery">
+                <div>
+                    <img src="https://picsum.photos/400/300?random=1" alt="Lego Product 1">
+                    <h3>Awesome Lego Set</h3>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                </div>
+                <div>
+                    <img src="https://picsum.photos/400/300?random=2" alt="Lego Product 2">
+                    <h3>Fantastic Brick Kit</h3>
+                    <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                </div>
+                <div>
+                    <img src="https://picsum.photos/400/300?random=3" alt="Lego Product 3">
+                    <h3>Creative Building Box</h3>
+                    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
+                </div>
+            </div>
+        </section>
+        <section id="robotics-lessons">
+            <h2>Robotics Lessons & Training</h2>
+            <p>Unlock the world of robotics with our engaging lessons and training programs. Suitable for all ages and skill levels!</p>
+            <img src="https://picsum.photos/600/400?random=4" alt="Robotics Lesson in action">
+            <p>Our lessons cover everything from basic programming concepts to advanced robot building and automation. Join us to learn, create, and innovate!</p>
+        </section>
+        <section id="contact">
+            <h2>Get In Touch</h2>
+            <p>Email: contact@legostore.example.com | Phone: 123-456-7890</p>
+            <p>123 Lego Lane, Bricksville, BK 54321</p>
+        </section>
+    </main>
+    <footer>
+        <p>© 2023 BrickVerse. All rights reserved.</p>
+    </footer>
+
+    <!-- GSAP CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <!-- ScrollTrigger Plugin CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <script>
+        // Register the ScrollTrigger plugin
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Function to set up all ScrollTrigger animations
+        function setupScrollAnimations() {
+
+            // About Us section animations
+            gsap.from("#about-us h2", {
+                opacity: 0,
+                y: 50,
+                duration: 0.8,
+                scrollTrigger: {
+                    trigger: "#about-us h2",
+                    start: "top bottom", // when the top of the trigger hits the bottom of the viewport
+                    toggleActions: "play none none none", // play on enter, do nothing on leave, etc.
+                    // markers: true // Uncomment for debugging trigger points
+                }
+            });
+            gsap.from("#about-us p:nth-of-type(1)", {
+                opacity: 0,
+                y: 50,
+                duration: 0.8,
+                delay: 0.1, // Stagger effect relative to previous element
+                scrollTrigger: {
+                    trigger: "#about-us p:nth-of-type(1)",
+                    start: "top bottom",
+                    toggleActions: "play none none none",
+                }
+            });
+            gsap.from("#about-us p:nth-of-type(2)", {
+                opacity: 0,
+                y: 50,
+                duration: 0.8,
+                delay: 0.2, // Stagger effect
+                scrollTrigger: {
+                    trigger: "#about-us p:nth-of-type(2)",
+                    start: "top bottom",
+                    toggleActions: "play none none none",
+                }
+            });
+
+            // Products section animations
+            gsap.from("#products h2", {
+                opacity: 0,
+                y: 50,
+                duration: 0.8,
+                scrollTrigger: {
+                    trigger: "#products h2",
+                    start: "top bottom",
+                    toggleActions: "play none none none",
+                }
+            });
+            gsap.from("#products p", {
+                opacity: 0,
+                y: 50,
+                duration: 0.8,
+                delay: 0.1,
+                scrollTrigger: {
+                    trigger: "#products p",
+                    start: "top bottom",
+                    toggleActions: "play none none none",
+                }
+            });
+
+            // Product gallery items - using gsap.utils.toArray and stagger for efficiency
+            gsap.utils.toArray(".product-gallery > div").forEach((item, i) => {
+                gsap.from(item, {
+                    opacity: 0,
+                    y: 50,
+                    duration: 0.8,
+                    delay: i * 0.15, // Stagger delay based on index
+                    scrollTrigger: {
+                        trigger: item,
+                        start: "top bottom", // Trigger when item enters viewport
+                        toggleActions: "play none none none",
+                        // markers: {startColor: "blue", endColor: "blue", indent: 20} // Uncomment for debugging specific item triggers
+                    }
+                });
+            });
+
+            // Robotics Lessons section animations
+            gsap.from("#robotics-lessons h2", {
+                opacity: 0,
+                y: 50,
+                duration: 0.8,
+                scrollTrigger: {
+                    trigger: "#robotics-lessons h2",
+                    start: "top bottom",
+                    toggleActions: "play none none none",
+                }
+            });
+            gsap.from("#robotics-lessons p:nth-of-type(1)", {
+                opacity: 0,
+                y: 50,
+                duration: 0.8,
+                delay: 0.1,
+                scrollTrigger: {
+                    trigger: "#robotics-lessons p:nth-of-type(1)",
+                    start: "top bottom",
+                    toggleActions: "play none none none",
+                }
+            });
+            gsap.from("#robotics-lessons img", {
+                opacity: 0,
+                y: 50,
+                duration: 1.0, // Slightly longer duration for the image
+                delay: 0.2,
+                scrollTrigger: {
+                    trigger: "#robotics-lessons img",
+                    start: "top bottom",
+                    toggleActions: "play none none none",
+                }
+            });
+            gsap.from("#robotics-lessons p:nth-of-type(2)", {
+                opacity: 0,
+                y: 50,
+                duration: 0.8,
+                delay: 0.3,
+                scrollTrigger: {
+                    trigger: "#robotics-lessons p:nth-of-type(2)",
+                    start: "top bottom",
+                    toggleActions: "play none none none",
+                }
+            });
+
+            // Contact section animations
+            gsap.from("#contact h2", {
+                opacity: 0,
+                y: 50,
+                duration: 0.8,
+                scrollTrigger: {
+                    trigger: "#contact h2",
+                    start: "top bottom",
+                    toggleActions: "play none none none",
+                }
+            });
+            gsap.from("#contact p:nth-of-type(1)", {
+                opacity: 0,
+                y: 50,
+                duration: 0.8,
+                delay: 0.1,
+                scrollTrigger: {
+                    trigger: "#contact p:nth-of-type(1)",
+                    start: "top bottom",
+                    toggleActions: "play none none none",
+                }
+            });
+            gsap.from("#contact p:nth-of-type(2)", {
+                opacity: 0,
+                y: 50,
+                duration: 0.8,
+                delay: 0.2,
+                scrollTrigger: {
+                    trigger: "#contact p:nth-of-type(2)",
+                    start: "top bottom",
+                    toggleActions: "play none none none",
+                }
+            });
+        }
+
+        // Initialize animations when the DOM is fully loaded
+        document.addEventListener("DOMContentLoaded", setupScrollAnimations);
+    </script>
+</body>
+</html>
