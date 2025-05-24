@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrickVerse Lego & Robotics</title>
+    
+    <!-- AOS CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+    
+    <style>
+        /* Basic Reset/Defaults */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: sans-serif;
+            line-height: 1.6;
+            padding: 20px; /* Added body padding */
+            /* Ensure smooth scrolling for the entire page if not using a smooth scroll library */
+            scroll-behavior: smooth; 
+        }
+
+        h1, h2, h3, p {
+            margin: 0; /* Default margins removed, will be set specifically */
+        }
+
+        /*
+        Locomotive Scroll's fadeInUp and is-inview classes are no longer needed.
+        AOS handles its own animation classes and triggers.
+        .fadeInUp {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .fadeInUp.is-inview {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        */
+
+        /* Layout and Spacing */
+        header {
+            background-color: #333;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        section {
+            margin-bottom: 100vh; /* Significant bottom margin for scroll effects */
+            padding: 40px;
+            border: 1px solid #eee; /* Added a light border to see section bounds */
+            background-color: #f9f9f9; /* Light background for sections */
+            /* AOS elements initially hidden by the library's CSS */
+            /* You might see a slight flicker if not managed well, but AOS takes care of this */
+        }
+        
+        /* Typography */
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-align: center; /* Center header H1 */
+        }
+
+        h2 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #333;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        p {
+            margin-bottom: 15px;
+            color: #666;
+        }
+
+        /* Product Gallery */
+        .product-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .product-gallery > div {
+            border: 1px solid #ddd;
+            padding: 15px;
+            width: 300px;
+            text-align: center;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+            background-color: white; /* White background for product cards */
+        }
+
+        .product-gallery img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        /* Images */
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 5px; /* Slightly rounded corners for images */
+        }
+
+        /* Specific styling for robotics lesson image to ensure clarity */
+        #robotics-lessons img {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15); /* Add a subtle shadow */
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>BrickVerse Lego & Robotics</h1>
+    </header>
+    <main> <!-- data-scroll-container removed -->
+        <section id="about-us">
+            <!-- data-scroll and data-scroll-speed replaced with data-aos="fade-up" -->
+            <h2 data-aos="fade-up" data-aos-duration="800">About Our Lego Store</h2>
+            <p data-aos="fade-up" data-aos-duration="1000" data-aos-delay="100">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <p data-aos="fade-up" data-aos-duration="1200" data-aos-delay="200">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. We are passionate about Lego and fostering learning through play.</p>
+        </section>
+        <section id="products">
+            <h2 data-aos="fade-up" data-aos-duration="800">Our Lego Products</h2>
+            <p data-aos="fade-up" data-aos-duration="1000" data-aos-delay="100">Explore our wide range of Lego sets, from classic themes to the latest releases. We have something for every builder!</p>
+            <div class="product-gallery">
+                <!-- data-scroll and data-scroll-class replaced with data-aos="fade-up" -->
+                <!-- data-scroll-delay converted to data-aos-delay in milliseconds -->
+                <div data-aos="fade-up" data-aos-duration="800" data-aos-delay="0">
+                    <img src="https://picsum.photos/400/300?random=1" alt="Lego Product 1">
+                    <h3>Awesome Lego Set</h3>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                </div>
+                <div data-aos="fade-up" data-aos-duration="800" data-aos-delay="100">
+                    <img src="https://picsum.photos/400/300?random=2" alt="Lego Product 2">
+                    <h3>Fantastic Brick Kit</h3>
+                    <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                </div>
+                <div data-aos="fade-up" data-aos-duration="800" data-aos-delay="200">
+                    <img src="https://picsum.photos/400/300?random=3" alt="Lego Product 3">
+                    <h3>Creative Building Box</h3>
+                    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
+                </div>
+            </div>
+        </section>
+        <section id="robotics-lessons">
+            <h2 data-aos="fade-up" data-aos-duration="800">Robotics Lessons & Training</h2>
+            <p data-aos="fade-up" data-aos-duration="1000" data-aos-delay="100">Unlock the world of robotics with our engaging lessons and training programs. Suitable for all ages and skill levels!</p>
+            <!-- data-scroll, data-scroll-speed, data-scroll-class replaced with data-aos="fade-up" -->
+            <img src="https://picsum.photos/600/400?random=4" alt="Robotics Lesson in action" data-aos="fade-up" data-aos-duration="1200" data-aos-delay="200">
+            <p data-aos="fade-up" data-aos-duration="1000" data-aos-delay="300">Our lessons cover everything from basic programming concepts to advanced robot building and automation. Join us to learn, create, and innovate!</p>
+        </section>
+        <section id="contact">
+            <h2 data-aos="fade-up" data-aos-duration="800">Get In Touch</h2>
+            <p data-aos="fade-up" data-aos-duration="1000" data-aos-delay="100">Email: contact@legostore.example.com | Phone: 123-456-7890</p>
+            <p data-aos="fade-up" data-aos-duration="1200" data-aos-delay="200">123 Lego Lane, Bricksville, BK 54321</p>
+        </section>
+    </main>
+    <footer>
+        <p>© 2023 BrickVerse. All rights reserved.</p>
+    </footer>
+
+    <!-- AOS JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            // Global settings:
+            disable: false, // accepts 'phone', 'tablet', 'mobile', boolean, expression or function
+            startEvent: 'DOMContentLoaded', // name of the event dispatched on the document, that AOS should initialize on
+            initClassName: 'aos-init', // class applied after initialization
+            animatedClassName: 'aos-animate', // class applied on animation
+            useClassNames: false, // if true, will add `aos-{animation}` class to elements
+            disableMutationObserver: false, // disables automatic mutations' detections (advanced)
+            debounceDelay: 50, // the delay on debounce used while resizing window (advanced)
+            throttleDelay: 99, // the delay on throttle used while scrolling the page (advanced)
+            
+            // Settings that can be overridden on per-element basis, by `data-aos-*` attributes:
+            offset: 120, // offset (in px) from the original trigger point
+            delay: 0, // values from 0 to 3000, with step 50ms
+            duration: 400, // values from 0 to 3000, with step 50ms
+            easing: 'ease', // default easing for AOS animations
+            once: false, // whether animation should happen only once - while scrolling down
+            mirror: false, // whether elements should animate out while scrolling past them
+            anchorPlacement: 'top-bottom', // defines which position of the element should trigger the animation
+        });
+    </script>
+</body>
+</html>
