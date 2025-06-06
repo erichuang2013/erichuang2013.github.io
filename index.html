@@ -27,6 +27,12 @@
         }
         .controls label {
             margin-right: 10px;
+            vertical-align: middle; /* Align labels better */
+        }
+        .controls input[type="range"] {
+            width: 120px; /* Adjust slider width */
+            margin-right: 5px;
+            vertical-align: middle; /* Align sliders with labels better */
         }
         .controls input[type="number"] {
             width: 60px;
@@ -34,6 +40,15 @@
             margin-right: 15px;
             border: 1px solid #ddd;
             border-radius: 4px;
+        }
+        .controls span {
+            display: inline-block;
+            width: 40px; /* Adjust width as needed */
+            text-align: left;
+            margin-left: 5px;
+            margin-right: 10px;
+            font-weight: bold;
+            color: #333;
         }
         #canvasContainer {
             border: 1px solid #ccc;
@@ -46,13 +61,16 @@
 
     <div class="controls">
         <label for="a">a:</label>
-        <input type="number" id="a" step="0.1" value="1" min="-5" max="5">
+        <input type="range" id="a" min="-5" max="5" value="1" step="0.1">
+        <span id="aValue">1</span>
 
         <label for="b">b:</label>
-        <input type="number" id="b" step="0.1" value="0" min="-10" max="10">
+        <input type="range" id="b" min="-10" max="10" value="0" step="0.1">
+        <span id="bValue">0</span>
 
         <label for="c">c:</label>
-        <input type="number" id="c" step="0.1" value="0" min="-10" max="10">
+        <input type="range" id="c" min="-10" max="10" value="0" step="0.1">
+        <span id="cValue">0</span>
     </div>
 
     <div id="canvasContainer"></div>

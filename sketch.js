@@ -1,8 +1,9 @@
 let inputA, inputB, inputC;
+let spanA, spanB, spanC; // Added for value display
 let canvas;
 
 const canvasWidth = 600;
-const canvasHeight = 450; // Adjusted to better fit y-range -30 to 30 with x-range -10 to 10
+const canvasHeight = 450;
 
 // Define graph ranges
 const xMin = -10;
@@ -14,15 +15,34 @@ function setup() {
     canvas = createCanvas(canvasWidth, canvasHeight);
     canvas.parent('canvasContainer');
 
-    // Get input elements
+    // Get input elements (sliders)
     inputA = select('#a');
     inputB = select('#b');
     inputC = select('#c');
 
-    // Redraw when inputs change
-    inputA.input(drawGraph);
-    inputB.input(drawGraph);
-    inputC.input(drawGraph);
+    // Get span elements for displaying values
+    spanA = select('#aValue');
+    spanB = select('#bValue');
+    spanC = select('#cValue');
+
+    // Set initial span values from sliders
+    spanA.html(inputA.value());
+    spanB.html(inputB.value());
+    spanC.html(inputC.value());
+
+    // Redraw when inputs change and update span values
+    inputA.input(() => {
+        spanA.html(inputA.value());
+        drawGraph();
+    });
+    inputB.input(() => {
+        spanB.html(inputB.value());
+        drawGraph();
+    });
+    inputC.input(() => {
+        spanC.html(inputC.value());
+        drawGraph();
+    });
 
     // Initial draw
     drawGraph();
@@ -31,21 +51,14 @@ function setup() {
 function drawGraph() {
     background(255); // White background
 
-    // Get current coefficient values
     let a = parseFloat(inputA.value());
     let b = parseFloat(inputB.value());
     let c = parseFloat(inputC.value());
 
-    // Validate 'a' to ensure it's not zero for a quadratic equation
-    if (a === 0) {
-        // Display a message or handle as a linear equation if desired
-        // For now, we'll just not draw if a is 0, or draw a straight line
-        // For simplicity, let's ensure 'a' is not treated as 0 if the input is "0" but allow small non-zero values
-        if (abs(a) < 0.00001) { // Check if a is effectively zero
-             // Draw Axes and Grid anyway
-            drawAxesAndGrid();
-            fill(255, 0, 0);
-            textAlign(CENTER, CENTER);
+    if (abs(a) < 0.00001) { // Check if a is effectively zero
+        drawAxesAndGrid();
+        fill(255, 0, 0);
+        textAlign(CENTER, CENTER);
             textSize(16);
             text("Coefficient 'a' cannot be exactly zero for a parabola.", canvasWidth / 2, canvasHeight / 2);
             return;
@@ -151,5 +164,3 @@ function drawTitlesAndLabels(a,b,c) {
 }
 
 // Initial call to draw the graph when script loads
-// (setup will call drawGraph, so this might be redundant, but ensures it if setup is delayed)
-// if (typeof drawGraph === "function") drawGraph();
