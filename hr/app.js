@@ -15,11 +15,14 @@ async function requestWakeLock() {
 }
 
 statusText.addEventListener('click', function() {
-  requestWakeLock();
   statusText.textContent = 'Breathe...';
   heartRates = [];
   heartRateSensor.connect()
-  .then(() => heartRateSensor.startNotificationsHeartRateMeasurement().then(handleHeartRateMeasurement))
+  .then(() => {
+    requestWakeLock();
+    return heartRateSensor.startNotificationsHeartRateMeasurement();
+  })
+  .then(handleHeartRateMeasurement)
   .catch(error => {
     statusText.textContent = error;
   });
