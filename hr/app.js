@@ -1,7 +1,21 @@
 var canvas = document.querySelector('canvas');
 var statusText = document.querySelector('#statusText');
 
+let wakeLock = null;
+
+async function requestWakeLock() {
+  if ('wakeLock' in navigator) {
+    try {
+      wakeLock = await navigator.wakeLock.request('screen');
+      console.log('Screen Wake Lock is active');
+    } catch (err) {
+      console.error(`${err.name}, ${err.message}`);
+    }
+  }
+}
+
 statusText.addEventListener('click', function() {
+  requestWakeLock();
   statusText.textContent = 'Breathe...';
   heartRates = [];
   heartRateSensor.connect()
@@ -135,5 +149,8 @@ window.onresize = drawWaves;
 document.addEventListener("visibilitychange", () => {
   if (!document.hidden) {
     drawWaves();
+    if (wakeLock !== null && wakeLock.released) {
+      requestWakeLock();
+    }
   }
 });
