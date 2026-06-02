@@ -18,8 +18,8 @@ statusText.addEventListener('click', function() {
   statusText.textContent = 'Breathe...';
   heartRates = [];
   heartRateSensor.connect()
-  .then(() => {
-    requestWakeLock();
+  .then(async () => {
+    await requestWakeLock();
     return heartRateSensor.startNotificationsHeartRateMeasurement();
   })
   .then(handleHeartRateMeasurement)
@@ -31,6 +31,8 @@ statusText.addEventListener('click', function() {
 function handleHeartRateMeasurement(heartRateMeasurement) {
   heartRateMeasurement.addEventListener('characteristicvaluechanged', event => {
     var heartRateMeasurement = heartRateSensor.parseHeartRate(event.target.value);
+    console.debug('[HR Data] Received HR:', heartRateMeasurement.heartRate, 'at', Date.now());
+
     statusText.innerHTML = heartRateMeasurement.heartRate + ' &#x2764;';
     
     // 修改 1: 紀錄心率時同時記下當前時間戳記 (毫秒)
@@ -55,6 +57,7 @@ canvas.addEventListener('click', event => {
 function drawWaves() {
   requestAnimationFrame(() => {
     var now = Date.now();
+    console.debug('[Draw] drawWaves started. Points before filter:', heartRates.length);
     
     // 需求 1: 只保留最近 120 秒 (120,000 毫秒) 的資料
     heartRates = heartRates.filter(item => now - item.timestamp <= 180000);
@@ -75,6 +78,8 @@ function drawWaves() {
     
     if (heartRates.length === 0) return;
 
+    console.debug('[Draw] Rendering graph with', heartRates.length, 'points');
+
     // --- 需求 2: 計算統計數值 ---
     var allValues = heartRates.map(d => d.value);
     var globalMax = Math.max(...allValues);
@@ -92,7 +97,7 @@ function drawWaves() {
         var currentRate = heartRates[i + offset].value;
         var barHeight = Math.max(0, Math.round((currentRate - 80) * canvas.height / 90));
         context.beginPath();
-        context.rect(11 * i + margin, canvas.height - barHeight, margin, Math.max(0, barHeight - margin));
+        context.rect(11 * i + margin, canvas.height - barHeight, Math.max(0, 11 - margin * 2), Math.max(0, barHeight - margin));
         context.stroke();
       }
 
