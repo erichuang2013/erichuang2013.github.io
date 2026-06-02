@@ -17,6 +17,8 @@ async function requestWakeLock() {
 statusText.addEventListener('click', function() {
   statusText.textContent = 'Breathe...';
   heartRates = [];
+  zoneTimes = { Z5: 0, Z4: 0, Z3: 0, Z2: 0, Z1: 0 };
+  lastHrTimestamp = null;
   heartRateSensor.connect()
   .then(async () => {
     await requestWakeLock();
@@ -31,14 +33,33 @@ statusText.addEventListener('click', function() {
 function handleHeartRateMeasurement(heartRateMeasurement) {
   heartRateMeasurement.addEventListener('characteristicvaluechanged', event => {
     var heartRateMeasurement = heartRateSensor.parseHeartRate(event.target.value);
-    console.debug('[HR Data] Received HR:', heartRateMeasurement.heartRate, 'at', Date.now());
+    var hr = heartRateMeasurement.heartRate;
+    console.debug('[HR Data] Received HR:', hr, 'at', Date.now());
 
-    statusText.innerHTML = heartRateMeasurement.heartRate + ' &#x2764;';
+    var hrColor = '#05a988'; // Base (< 91)
+    if (hr > 164) hrColor = '#f83b15';      // Z5
+    else if (hr > 146) hrColor = '#F27E0A'; // Z4
+    else if (hr > 128) hrColor = '#f2d202'; // Z3
+    else if (hr > 109) hrColor = '#29f013'; // Z2
+    else if (hr > 90) hrColor = '#6be501';  // Z1
+
+    statusText.innerHTML = '<span style="font-size: 2em; color: ' + hrColor + ';">' + hr + ' &#x2764;</span>';
     
+    var now = Date.now();
+    if (lastHrTimestamp !== null) {
+      var diff = now - lastHrTimestamp;
+      if (hr > 164) zoneTimes.Z5 += diff;
+      else if (hr > 146) zoneTimes.Z4 += diff;
+      else if (hr > 128) zoneTimes.Z3 += diff;
+      else if (hr > 109) zoneTimes.Z2 += diff;
+      else  zoneTimes.Z1 += diff;
+    }
+    lastHrTimestamp = now;
+
     // 修改 1: 紀錄心率時同時記下當前時間戳記 (毫秒)
     heartRates.push({
       value: heartRateMeasurement.heartRate,
-      timestamp: Date.now()
+      timestamp: now
     });
     
     drawWaves();
@@ -47,6 +68,8 @@ function handleHeartRateMeasurement(heartRateMeasurement) {
 
 // 儲存結構改為 [{ value: Number, timestamp: Number }, ...]
 var heartRates = [];
+var zoneTimes = { Z5: 0, Z4: 0, Z3: 0, Z2: 0, Z1: 0 };
+var lastHrTimestamp = null;
 var mode = 'bar';
 
 canvas.addEventListener('click', event => {
@@ -90,26 +113,47 @@ function drawWaves() {
     var recentMin = recent90sData.length > 0 ? Math.min(...recent90sData) : globalMax;
 
     // --- 繪製心率圖表 ---
-    context.strokeStyle = '#00796B';
-    var displayCount = Math.min(heartRates.length, maxBars);
+    var zones = [
+      { min: 80, max: 90, color: '#05a988' },   // Base (< 91)
+      { min: 90, max: 109, color: '#6be501' },  // 91 - 109
+      { min: 109, max: 128, color: '#29f013' }, // 110 - 128
+      { min: 128, max: 146, color: '#f2d202' }, // 129 - 146
+      { min: 146, max: 164, color: '#F27E0A' }, // 147 - 164
+      { min: 164, max: 250, color: '#f83b15' }  // 165+
+    ];
 
-      for (var i = 0; i < displayCount; i++) {
-        var currentRate = heartRates[i + offset].value;
-        var barHeight = Math.max(0, Math.round((currentRate - 80) * canvas.height / 90));
-        context.beginPath();
-        context.rect(11 * i + margin, canvas.height - barHeight, Math.max(0, 11 - margin * 2), Math.max(0, barHeight - margin));
-        context.stroke();
+    var displayCount = Math.min(heartRates.length, maxBars);
+    var barWidth = Math.max(0, 11 - margin * 2);
+
+    for (var i = 0; i < displayCount; i++) {
+      var currentRate = heartRates[i + offset].value;
+      var x = 11 * i + margin;
+
+      for (var z = 0; z < zones.length; z++) {
+        var zone = zones[z];
+        if (currentRate > zone.min) {
+          var segmentTop = Math.min(currentRate, zone.max);
+          var topY = canvas.height - Math.max(0, Math.round((segmentTop - 80) * canvas.height / 90));
+          var bottomY = canvas.height - Math.max(0, Math.round((zone.min - 80) * canvas.height / 90));
+          var segmentHeight = Math.max(0, bottomY - topY);
+
+          if (segmentHeight > 0) {
+            context.fillStyle = zone.color;
+            context.fillRect(x, topY, barWidth, segmentHeight);
+          }
+        }
       }
+    }
 
     // --- 輔助函式：繪製水平線與標籤 ---
-    function drawHorizontalLine(value, color, label) {
+    function drawHorizontalLine(value, color, label, lineWidth = 2) {
       var calculatedHeight = Math.round((value - 80) * canvas.height / 90);
       var y = canvas.height - Math.max(0, Math.min(canvas.height, calculatedHeight));
       
       // 畫虛線
       context.save();
       context.strokeStyle = color;
-      context.lineWidth = 2;
+      context.lineWidth = lineWidth;
       context.setLineDash([6, 4]);
       context.beginPath();
       context.moveTo(0, y);
@@ -125,9 +169,9 @@ function drawWaves() {
     }
 
     // 繪製三條動態水平線
-    drawHorizontalLine(globalMax, '#FF4444', 'MAX');         // 全域最大值（紅）
-    drawHorizontalLine(recentMax, '#FFBB33', '90s MAX');     // 近90秒最大值（黃）
-    drawHorizontalLine(recentMin, '#33B5E5', '90s MIN');     // 近90秒最小值（藍）
+    drawHorizontalLine(globalMax, '#f91111', 'MAX', 9);      // 全域最大值（紅）
+    drawHorizontalLine(recentMax, '#FFBB33', '90s MAX', 6);     // 近90秒最大值（黃）
+    drawHorizontalLine(recentMin, '#CCCCCC', '90s MIN', 6);  // 近90秒最小值（淺灰）
 
     // --- 繪製左上角狀態文字 ---
     var currentHr = heartRates[heartRates.length - 1].value;
@@ -142,13 +186,42 @@ function drawWaves() {
       textX += context.measureText(text).width;
     }
 
-    drawColoredText('HR: ' + currentHr, '#00796B');
+    var currentHrColor = '#05a988'; // Base (< 91)
+    if (currentHr > 164) currentHrColor = '#f91111';      // Z5
+    else if (currentHr > 146) currentHrColor = '#e84b02'; // Z4
+    else if (currentHr > 128) currentHrColor = '#e9ec16'; // Z3
+    else if (currentHr > 109) currentHrColor = '#55f144'; // Z2
+    else if (currentHr > 90) currentHrColor = '#4bd130';  // Z1
+
+    drawColoredText('HR: ' + currentHr, currentHrColor);
     drawColoredText('  /  ', '#888888');
     drawColoredText('90MAX: ' + recentMax, '#FFBB33');
     drawColoredText('  /  ', '#888888');
-    drawColoredText('90MIN: ' + recentMin, '#33B5E5');
+    drawColoredText('90MIN: ' + recentMin, '#CCCCCC');
     drawColoredText('  /  ', '#888888');
-    drawColoredText('MAX: ' + globalMax, '#FF4444');
+    drawColoredText('MAX: ' + globalMax, '#ec6e55');
+
+    // --- 繪製第二行：各區間停留時間 ---
+    textX = 10 * devicePixelRatio;
+    textY += 45 * devicePixelRatio;
+    context.font = 'bold ' + (20 * devicePixelRatio) + 'px sans-serif';
+
+    function formatTime(ms) {
+      var totalSeconds = Math.floor(ms / 1000);
+      var minutes = Math.floor(totalSeconds / 60);
+      var seconds = totalSeconds % 60;
+      return minutes.toString().padStart(2, '0') + "'" + seconds.toString().padStart(2, '0');
+    }
+
+    drawColoredText("Z5: " + formatTime(zoneTimes.Z5), '#ea2b05');
+    drawColoredText(' / ', '#888888');
+    drawColoredText("Z4: " + formatTime(zoneTimes.Z4), '#fb7d00');
+    drawColoredText(' / ', '#888888');
+    drawColoredText("Z3: " + formatTime(zoneTimes.Z3), '#e8bc38');
+    drawColoredText(' / ', '#888888');
+    drawColoredText("Z2: " + formatTime(zoneTimes.Z2), '#55f013');
+    drawColoredText(' / ', '#888888');
+    drawColoredText("Z1: " + formatTime(zoneTimes.Z1), '#6be501');
   });
 }
 
