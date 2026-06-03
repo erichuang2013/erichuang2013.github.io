@@ -133,8 +133,8 @@ function drawWaves() {
         var zone = zones[z];
         if (currentRate > zone.min) {
           var segmentTop = Math.min(currentRate, zone.max);
-          var topY = canvas.height - Math.max(0, Math.round((segmentTop - 80) * canvas.height / 90));
-          var bottomY = canvas.height - Math.max(0, Math.round((zone.min - 80) * canvas.height / 90));
+          var topY = canvas.height - Math.max(0, Math.round((segmentTop - 90) * canvas.height / 110));
+          var bottomY = canvas.height - Math.max(0, Math.round((zone.min - 90) * canvas.height / 110));
           var segmentHeight = Math.max(0, bottomY - topY);
 
           if (segmentHeight > 0) {
@@ -147,7 +147,7 @@ function drawWaves() {
 
     // --- 輔助函式：繪製水平線與標籤 ---
     function drawHorizontalLine(value, color, label, lineWidth = 2) {
-      var calculatedHeight = Math.round((value - 80) * canvas.height / 90);
+      var calculatedHeight = Math.round((value - 90) * canvas.height / 110);
       var y = canvas.height - Math.max(0, Math.min(canvas.height, calculatedHeight));
       
       // 畫虛線
