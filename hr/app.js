@@ -112,11 +112,11 @@ function drawWaves() {
     var recentMax = recent90sData.length > 0 ? Math.max(...recent90sData) : globalMax;
     var recentMin = recent90sData.length > 0 ? Math.min(...recent90sData) : globalMax;
 
-    // --- 計算心率斜率 (3 秒間隔) ---
+    // --- 計算心率斜率 (10 秒間隔) ---
     var slopes = [];
     for (var i = 0; i < heartRates.length; i++) {
       var currentPoint = heartRates[i];
-      var targetTime = currentPoint.timestamp - 3000; // 3 seconds ago
+      var targetTime = currentPoint.timestamp - 10000; // 10 seconds ago
       var prevPoint = currentPoint;
       for (var j = i - 1; j >= 0; j--) {
         if (heartRates[j].timestamp <= targetTime) {
