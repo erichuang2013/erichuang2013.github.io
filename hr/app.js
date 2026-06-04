@@ -112,10 +112,30 @@ function drawWaves() {
     var recentMax = recent90sData.length > 0 ? Math.max(...recent90sData) : globalMax;
     var recentMin = recent90sData.length > 0 ? Math.min(...recent90sData) : globalMax;
 
+    // --- 計算心率斜率 (3 秒間隔) ---
+    var slopes = [];
+    for (var i = 0; i < heartRates.length; i++) {
+      var currentPoint = heartRates[i];
+      var targetTime = currentPoint.timestamp - 3000; // 3 seconds ago
+      var prevPoint = currentPoint;
+      for (var j = i - 1; j >= 0; j--) {
+        if (heartRates[j].timestamp <= targetTime) {
+          prevPoint = heartRates[j];
+          break;
+        }
+      }
+      var slope = 0;
+      var dt = (currentPoint.timestamp - prevPoint.timestamp) / 1000;
+      if (dt > 0) {
+        slope = (currentPoint.value - prevPoint.value) / dt;
+      }
+      slopes.push(slope);
+    }
+
     // --- 繪製心率圖表 ---
     var zones = [
-      { min: 80, max: 90, color: '#05a988' },   // Base (< 91)
-      { min: 90, max: 109, color: '#6be501' },  // 91 - 109
+      { min: 80, max: 90, color: '#00a382' },   // Base (< 91)
+      { min: 90, max: 109, color: '#63cd06' },  // 91 - 109
       { min: 109, max: 128, color: '#29f013' }, // 110 - 128
       { min: 128, max: 146, color: '#f2d202' }, // 129 - 146
       { min: 146, max: 164, color: '#F27E0A' }, // 147 - 164
@@ -144,6 +164,37 @@ function drawWaves() {
         }
       }
     }
+
+    // --- 繪製斜率線 (Slope Line) ---
+    var slopeZeroY = canvas.height * 0.85; // 放於下方 85% 高度處
+    var slopeScale = (canvas.height * 0.1) / 5; // 假設 ±5 為一個主要刻度範圍
+
+    // 繪製斜率基準線 (0 線)
+    context.save();
+    context.strokeStyle = 'rgba(159, 0, 19, 0.32)';
+    context.lineWidth = 2 * devicePixelRatio;
+    context.setLineDash([4, 4]);
+    context.beginPath();
+    context.moveTo(0, slopeZeroY);
+    context.lineTo(usableWidth, slopeZeroY);
+    context.stroke();
+    context.restore();
+
+    // 繪製斜率資料線
+    context.save();
+    context.strokeStyle = '#fa5629'; // 青色斜率線
+    context.lineWidth = 3 * devicePixelRatio;
+    context.beginPath();
+    for (var i = 0; i < displayCount; i++) {
+      var dataIndex = i + offset;
+      var slope = slopes[dataIndex];
+      var x = 11 * i + margin + (barWidth / 2);
+      var y = slopeZeroY - (slope * slopeScale);
+      if (i === 0) context.moveTo(x, y);
+      else context.lineTo(x, y);
+    }
+    context.stroke();
+    context.restore();
 
     // --- 輔助函式：繪製水平線與標籤 ---
     function drawHorizontalLine(value, color, label, lineWidth = 2) {
@@ -175,6 +226,7 @@ function drawWaves() {
 
     // --- 繪製左上角狀態文字 ---
     var currentHr = heartRates[heartRates.length - 1].value;
+    var currentSlope = slopes[slopes.length - 1].toFixed(1);
     var textX = 10 * devicePixelRatio;
     var textY = 10 * devicePixelRatio;
     context.font = 'bold ' + (36 * devicePixelRatio) + 'px sans-serif';
@@ -190,10 +242,13 @@ function drawWaves() {
     if (currentHr > 164) currentHrColor = '#f91111';      // Z5
     else if (currentHr > 146) currentHrColor = '#e84b02'; // Z4
     else if (currentHr > 128) currentHrColor = '#e9ec16'; // Z3
-    else if (currentHr > 109) currentHrColor = '#55f144'; // Z2
-    else if (currentHr > 90) currentHrColor = '#4bd130';  // Z1
+    else if (currentHr > 109) currentHrColor = '#5ef74d'; // Z2
+    else if (currentHr > 90) currentHrColor = '#3dba24';  // Z1
 
     drawColoredText('HR: ' + currentHr, currentHrColor);
+    drawColoredText('  /  ', '#888888');
+    var slopeColor = currentSlope > 0 ? '#ff5555' : (currentSlope < 0 ? '#55ff55' : '#00FFFF');
+    drawColoredText('SL: ' + currentSlope, slopeColor);
     drawColoredText('  /  ', '#888888');
     drawColoredText('90MAX: ' + recentMax, '#FFBB33');
     drawColoredText('  /  ', '#888888');
@@ -210,7 +265,7 @@ function drawWaves() {
       var totalSeconds = Math.floor(ms / 1000);
       var minutes = Math.floor(totalSeconds / 60);
       var seconds = totalSeconds % 60;
-      return minutes.toString().padStart(2, '0') + "'" + seconds.toString().padStart(2, '0');
+      return minutes.toString().padStart(1, '0') + "'" + seconds.toString().padStart(2, '0');
     }
 
     drawColoredText("Z5: " + formatTime(zoneTimes.Z5), '#ea2b05');
