@@ -129,6 +129,8 @@ function drawWaves() {
       if (dt > 0) {
         slope = (currentPoint.value - prevPoint.value) / dt;
       }
+      // Limit slope value to -3 to +3
+      slope = Math.max(-3, Math.min(3, slope));
       slopes.push(slope);
     }
 
@@ -166,8 +168,8 @@ function drawWaves() {
     }
 
     // --- 繪製斜率線 (Slope Line) ---
-    var slopeZeroY = canvas.height * 0.85; // 放於下方 85% 高度處
-    var slopeScale = (canvas.height * 0.1) / 5; // 假設 ±5 為一個主要刻度範圍
+    var slopeZeroY = canvas.height * 0.75; // 放於下方 75% 高度處 (使用下半部 50% 的空間)
+    var slopeScale = (canvas.height * 0.5) / 6; // 5X range scale for Y-axis (0-0.5 canvas height maps to slope -3 to 3)
 
     // 繪製斜率基準線 (0 線)
     context.save();
@@ -195,6 +197,75 @@ function drawWaves() {
     }
     context.stroke();
     context.restore();
+
+    // --- 繪製可見區間的最大值與最小值標籤 ---
+    var visibleMax = -Infinity;
+    var visibleMin = Infinity;
+    var maxIndex = -1;
+    var minIndex = -1;
+
+    var visibleMaxSlope = -Infinity;
+    var visibleMinSlope = Infinity;
+    var maxSlopeIndex = -1;
+    var minSlopeIndex = -1;
+
+    for (var i = 0; i < displayCount; i++) {
+      var val = heartRates[i + offset].value;
+      if (val > visibleMax) { visibleMax = val; maxIndex = i; }
+      if (val < visibleMin) { visibleMin = val; minIndex = i; }
+
+      var slopeVal = slopes[i + offset];
+      if (slopeVal > visibleMaxSlope) { visibleMaxSlope = slopeVal; maxSlopeIndex = i; }
+      if (slopeVal < visibleMinSlope) { visibleMinSlope = slopeVal; minSlopeIndex = i; }
+    }
+
+    if (maxIndex !== -1 && minIndex !== -1) {
+      context.save();
+      context.font = 'bold ' + (12 * devicePixelRatio) + 'px sans-serif';
+      context.textAlign = 'center';
+
+      // Label Max point (top of curve)
+      var maxX = 11 * maxIndex + margin + (barWidth / 2);
+      var maxY = canvas.height - Math.max(0, Math.round((visibleMax - 90) * canvas.height / 110));
+      context.fillStyle = '#f91111';
+      context.textBaseline = 'bottom';
+      context.fillText('MAX: ' + visibleMax, maxX, maxY - (5 * devicePixelRatio));
+
+      // Label Min point (bottom of curve)
+      var minX = 11 * minIndex + margin + (barWidth / 2);
+      var minY = canvas.height - Math.max(0, Math.round((visibleMin - 90) * canvas.height / 110));
+      var minLabelY = minY + (5 * devicePixelRatio);
+      context.fillStyle = '#05a988';
+      context.textBaseline = (minLabelY > canvas.height - (15 * devicePixelRatio)) ? 'bottom' : 'top';
+      if (minLabelY > canvas.height - (15 * devicePixelRatio)) minLabelY = minY - (5 * devicePixelRatio);
+      context.fillText('MIN: ' + visibleMin, minX, minLabelY);
+      
+      context.restore();
+    }
+
+    if (maxSlopeIndex !== -1 && minSlopeIndex !== -1) {
+      context.save();
+      context.font = 'bold ' + (12 * devicePixelRatio) + 'px sans-serif';
+      context.textAlign = 'center';
+
+      // Label Max Slope point (top of curve)
+      var maxSlX = 11 * maxSlopeIndex + margin + (barWidth / 2);
+      var maxSlY = slopeZeroY - (visibleMaxSlope * slopeScale);
+      context.fillStyle = '#ff5555';
+      context.textBaseline = 'bottom';
+      context.fillText('MAX SL: ' + visibleMaxSlope.toFixed(2), maxSlX, maxSlY - (5 * devicePixelRatio));
+
+      // Label Min Slope point (bottom of curve)
+      var minSlX = 11 * minSlopeIndex + margin + (barWidth / 2);
+      var minSlY = slopeZeroY - (visibleMinSlope * slopeScale);
+      var minSlLabelY = minSlY + (5 * devicePixelRatio);
+      context.fillStyle = '#55ff55';
+      context.textBaseline = (minSlLabelY > canvas.height - (15 * devicePixelRatio)) ? 'bottom' : 'top';
+      if (minSlLabelY > canvas.height - (15 * devicePixelRatio)) minSlLabelY = minSlY - (5 * devicePixelRatio);
+      context.fillText('MIN SL: ' + visibleMinSlope.toFixed(2), minSlX, minSlLabelY);
+      
+      context.restore();
+    }
 
     // --- 輔助函式：繪製水平線與標籤 ---
     function drawHorizontalLine(value, color, label, lineWidth = 2) {
@@ -226,7 +297,7 @@ function drawWaves() {
 
     // --- 繪製左上角狀態文字 ---
     var currentHr = heartRates[heartRates.length - 1].value;
-    var currentSlope = slopes[slopes.length - 1].toFixed(1);
+    var currentSlope = slopes[slopes.length - 1].toFixed(2);
     var textX = 10 * devicePixelRatio;
     var textY = 10 * devicePixelRatio;
     context.font = 'bold ' + (36 * devicePixelRatio) + 'px sans-serif';
